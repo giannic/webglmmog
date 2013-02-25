@@ -1,3 +1,5 @@
+// initial experimentation drawing webgl graphics from scratch
+
 var gl,
     canvas,
     FOV_MAX = 100.0,
