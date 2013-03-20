@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost:80');
+var socket = io.connect('http://localhost:3000');
 var WORLD = {
     stats:0,
     game:0,
