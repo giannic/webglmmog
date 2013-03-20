@@ -1,3 +1,6 @@
+/**
+ * Global Constants
+ */
 var VELOCITY = 50;
 var DIRECTION = {
     LEFT: 97,
@@ -7,20 +10,51 @@ var DIRECTION = {
     JUMP: 32
 };
 
-var app = require('http').createServer(handler),
-    io = require('socket.io').listen(app),
-    fs = require('fs');
 var current_id = 0;
 var entities = [];
 
-app.listen(80);
+/**
+ * Module dependencies.
+ */
 
-function handler(req, res) {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('Hello World\n');
-    console.log("server access");
-}
+var express = require('express')
+  , http = require('http');
 
+var app = express();
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+
+var routes = require('./routes')
+  , user = require('./routes/user')
+  , path = require('path')
+  , fs = require('fs');
+
+//server.listen(3000);
+
+app.configure(function(){
+  app.set('port', process.env.PORT || 3000);
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'ejs');
+  app.use(express.favicon());
+  app.use(express.logger('dev'));
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(app.router);
+  app.use(express.static(path.join(__dirname, 'public')));
+});
+
+app.configure('development', function(){
+  app.use(express.errorHandler());
+});
+
+app.get('/', routes.index);
+app.get('/users', user.list);
+
+http.createServer(app).listen(app.get('port'), function(){
+  console.log("Express server listening on port " + app.get('port'));
+});
+
+// original sockets code
 io.sockets.on('connection', function (socket) {
     current_id = entities.length;
     entities.push([0, 0]);
