@@ -7,30 +7,46 @@ $(document).ready(function() {
     init_stats();
     init_world();
     init_client();
-    //game.start();
 
-    function bindKeys() {
+    // THREEX utilities init
+    THREEx.WindowResize(WORLD.renderer, WORLD.camera);
+
+    $(document).keypress(function(e) {
+        e.preventDefault();
+
         var k;
-        $(document).keypress(function(e) {
+            //direction,
+            //r_axis, r_angle, r_matrix;
 
-            e.preventDefault();
-            k = (e.keyCode ? e.keyCode : e.which)
-            socket.emit('keypress', [id, k]);
-            if (k === DIRECTION.FORWARD) {
-                WORLD.player_mesh.position.z -= 50;
-            } else if (k === DIRECTION.BACK) {
-                WORLD.player_mesh.position.z += 50;
-            } else if (k === DIRECTION.LEFT) {
-                WORLD.player_mesh.position.x -= 50;
-            } else if (k === DIRECTION.RIGHT) {
-                WORLD.player_mesh.position.x += 50;
-            } else if (k === DIRECTION.JUMP) {
-                velocity = JUMP_VELOCITY;
-            }
-        });
-    }
+        k = (e.keyCode ? e.keyCode : e.which)
 
-    bindKeys();
+        if (k === DIRECTION.FORWARD) {
+            WORLD.player_mesh.translateZ(-MOVE_VELOCITY);
+        } else if (k === DIRECTION.BACK) {
+            WORLD.player_mesh.translateZ(MOVE_VELOCITY);
+        } else if (k === DIRECTION.LEFT) {
+            WORLD.player_mesh.translateX(-MOVE_VELOCITY);
+        } else if (k === DIRECTION.RIGHT) {
+            WORLD.player_mesh.translateX(MOVE_VELOCITY);
+        } else if (k === DIRECTION.JUMP) {
+            velocity = JUMP_VELOCITY;
+        }
+
+        socket.emit('keypress', [id, k]); // tell the server I am moving
+    });
+
+    //$(document).mousemove(function(e) { // this is different?
+    document.addEventListener("mousemove", function (e) {
+        var moveX, moveY;
+        var theta = Math.PI/360.0;
+
+        moveX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+        moveY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
+
+        WORLD.player_mesh.rotation.y -= moveX*0.01;
+        //WORLD.player_mesh.rotation.x -= moveY*0.01;
+        //WORLD.camera.lookAt(WORLD.player_mesh.position);
+    });
 
     /*
     $(window).keydown(function(event) {
@@ -45,6 +61,9 @@ $(document).ready(function() {
         id = assigned_id;
     });
 
+    /*
+     * Loads all the connected players from the central server
+     */
     socket.on('setupPlayers', function(server_entities) {
         for (var p in server_entities) {
             game.entities.push(new THREE.Mesh(WORLD.player_geometry, WORLD.player_material));

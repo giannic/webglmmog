@@ -9,7 +9,8 @@ var WORLD = {
 
 // CONSTANTS
 var velocity = 0,
-    JUMP_VELOCITY = 100,
+    JUMP_VELOCITY = 50,
+    MOVE_VELOCITY = 25,
     GRAVITY = 6,
     DIRECTION = {
         LEFT: 97,
