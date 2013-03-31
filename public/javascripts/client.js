@@ -48,6 +48,7 @@ function init_client() {
     WORLD.player_geometry = new THREE.SphereGeometry(20, 10, 10);
 }
 
+// currently not in use
 function detect_collisions() {
     var origin,
         local_vertex, global_vertex,
@@ -64,7 +65,6 @@ function detect_collisions() {
         ray = new THREE.Raycaster(origin, direction.clone().normalize());
         results = ray.intersectObjects(game.entities);
         if (results.length > 0 && results[0].distance < direction.length()) {
-            console.log("COLLISION");
         }
     }
 }

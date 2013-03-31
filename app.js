@@ -61,7 +61,6 @@ io.sockets.on('connection', function (socket) {
 
     // data: {"id":id, "pos":[x,y,z]}
     socket.on('keypress', function (data) {
-        console.log(data);
         //var player = entities[data[0]];
         var player = entities[data.id];
 
