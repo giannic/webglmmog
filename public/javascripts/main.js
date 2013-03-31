@@ -11,12 +11,12 @@ $(document).ready(function() {
     // THREEX utilities init
     THREEx.WindowResize(WORLD.renderer, WORLD.camera);
 
+    /*
+     * emitted data: {"id":id, "pos":[x,y,z]}
+     */
     $(document).keypress(function(e) {
-        e.preventDefault();
-
         var k;
-            //direction,
-            //r_axis, r_angle, r_matrix;
+        e.preventDefault();
 
         k = (e.keyCode ? e.keyCode : e.which)
 
@@ -32,7 +32,11 @@ $(document).ready(function() {
             velocity = JUMP_VELOCITY;
         }
 
-        socket.emit('keypress', [id, k]); // tell the server I am moving
+        // the id and position
+        socket.emit('keypress', {"id": id,
+                                 "pos": [WORLD.player_mesh.position.x,
+                                         WORLD.player_mesh.position.y,
+                                         WORLD.player_mesh.position.z]});
     });
 
     //$(document).mousemove(function(e) { // this is different?
@@ -45,14 +49,8 @@ $(document).ready(function() {
 
         WORLD.player_mesh.rotation.y -= moveX*0.01;
         //WORLD.player_mesh.rotation.x -= moveY*0.01;
-        //WORLD.camera.lookAt(WORLD.player_mesh.position);
     });
 
-    /*
-    $(window).keydown(function(event) {
-        socket.emit('playerUpdate', {player: me, direction: event.keyCode});
-    });
-    */
     socket.on('setupComplete', function(assigned_id) {
         game.start();
     });
@@ -92,19 +90,14 @@ $(document).ready(function() {
     });
     */
 
+    /*
+     * data: {"id":id, "pos":[x,y,z]}
+     */
     socket.on('updatePlayer', function(data) {
-        var player_id = data[0],
-            k = data[1];
-        if (k === DIRECTION.FORWARD) {
-            game.entities[player_id].position.z -= 50;
-        } else if (k === DIRECTION.BACK) {
-            game.entities[player_id].position.z += 50;
-        } else if (k === DIRECTION.LEFT) {
-            game.entities[player_id].position.x -= 50;
-        } else if (k === DIRECTION.RIGHT) {
-            game.entities[player_id].position.x += 50;
-        } else if (k === DIRECTION.JUMP) {
-            //velocity = JUMP_VELOCITY;
-        }
+        var id = data.id;
+
+        game.entities[id].position.x = data.pos[0];
+        game.entities[id].position.y = data.pos[1];
+        game.entities[id].position.z = data.pos[2];
     });
 });

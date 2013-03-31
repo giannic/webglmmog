@@ -59,27 +59,16 @@ io.sockets.on('connection', function (socket) {
     socket.emit('setupComplete'); // used to ensure mesh arent null
     socket.broadcast.emit('addPlayer', current_id);
 
-    // data: [player_id, keycode]
+    // data: {"id":id, "pos":[x,y,z]}
     socket.on('keypress', function (data) {
-        var player = entities[data[0]];
-        var k = data[1]; // keycode
-        if (k === DIRECTION.FORWARD) {
-            player[1] -= VELOCITY;
-        } else if (k === DIRECTION.BACK) {
-            player[1] += VELOCITY;
-        } else if (k === DIRECTION.LEFT) {
-            player[0] -= VELOCITY;
-        } else if (k === DIRECTION.RIGHT) {
-            player[0] += VELOCITY;
-        } else if (k === DIRECTION.JUMP) {
-        }
+        console.log(data);
+        //var player = entities[data[0]];
+        var player = entities[data.id];
+
+        player[0] = data.pos[0];
+        player[1] = data.pos[1];
+        player[2] = data.pos[2];
+
         socket.broadcast.emit('updatePlayer', data);
     });
-
-    /*
-    socket.on('playerUpdate', function (data) {
-        socket.broadcast.emit('playerUpdate', data);
-        socket.emit('playerUpdate', data);
-    });
-    */
 });
