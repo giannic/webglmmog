@@ -25,10 +25,13 @@ Entity.prototype.draw = function() {
 /*
  * Player
  */
-function Player(game, id, x, y) {
+function Player() {}
+function Player(game, id, x, y, active) {
     Entity.call(this, game, x, y);
     this.id = id;
+    this.active = active;
 }
+
 Player.prototype = new Entity();
 Player.prototype.constructor = Player;
 
@@ -37,5 +40,26 @@ Player.prototype.update = function() {
 }
 
 Player.prototype.draw = function(ctx) {
+    Entity.prototype.draw.call(this, ctx);
+}
+
+/*
+ * Bullet
+ */
+function Bulllet() {}
+function Bullet(game, velocity, mesh) {
+    Entity.call(this, game);
+    this.v = velocity;
+    this.mesh = mesh;
+}
+
+Bullet.prototype = new Entity();
+Bullet.prototype.constructor = Bullet;
+
+Bullet.prototype.update = function() {
+    Entity.prototype.update.call(this);
+}
+
+Bullet.prototype.draw = function(ctx) {
     Entity.prototype.draw.call(this, ctx);
 }

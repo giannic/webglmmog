@@ -25,6 +25,14 @@ function init_world() {
     WORLD.plane_mesh.position.y = -20;
     WORLD.plane_mesh.receiveShadow = true;
 
+    // player config
+    WORLD.player_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
+    WORLD.player_geometry = new THREE.SphereGeometry(20, 10, 10);
+
+    // bullets config
+    WORLD.bullet_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
+    WORLD.bullet_geometry = new THREE.SphereGeometry(5, 10, 10);
+
     WORLD.scene.add(light);
     WORLD.scene.add(WORLD.plane_mesh);
 }
@@ -43,9 +51,6 @@ function init_client() {
     WORLD.camera.useQuaternion = true;
     WORLD.camera.position.z = 500;
     WORLD.camera.position.y = 100;
-
-    WORLD.player_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
-    WORLD.player_geometry = new THREE.SphereGeometry(20, 10, 10);
 }
 
 // currently not in use
@@ -67,4 +72,16 @@ function detect_collisions() {
         if (results.length > 0 && results[0].distance < direction.length()) {
         }
     }
+}
+
+function emit_attack() {
+    var bullet = new Bullet();
+    game.bullets.push(new Bullet(game,
+                                 new THREE.Vector3(1, 1, 0),
+                                 new THREE.Mesh(WORLD.bullet_geometry,
+                                                WORLD.bullet_material))
+                     );
+    game.bullets[game.bullets.length-1].mesh.position.copy(WORLD.player_mesh.position);
+    WORLD.scene.add(game.bullets[game.bullets.length-1].mesh);
+    console.log("attacking");
 }

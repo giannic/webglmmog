@@ -5,8 +5,14 @@
  * By: Seth Ladd
  */
 
+/*
+ * ENTITIES FORMAT
+ * [{"id":id, "pos":[x,y,z], "active":(0 or 1)}]
+ */
+
 function GameEngine() {
     this.entities = [];
+    this.bullets = [];
     this.timer = new Timer();
 }
 
@@ -36,6 +42,30 @@ GameEngine.prototype.draw = function(callback) {
 }
 
 GameEngine.prototype.update = function() {
+    if (keys[KEY.FORWARD]) {
+        WORLD.player_mesh.translateZ(-MOVE_VELOCITY);
+    }
+
+    if (keys[KEY.BACK]) {
+        WORLD.player_mesh.translateZ(MOVE_VELOCITY);
+    }
+
+    if (keys[KEY.LEFT]) {
+        WORLD.player_mesh.translateX(-MOVE_VELOCITY);
+    }
+
+    if (keys[KEY.RIGHT]) {
+        WORLD.player_mesh.translateX(MOVE_VELOCITY);
+    }
+
+    if (keys[KEY.JUMP]) {
+        velocity = JUMP_VELOCITY;
+    }
+
+    if (keys[KEY.ATTACK]) {
+        emit_attack();
+    }
+
     WORLD.player_mesh.position.y += velocity;
     if (WORLD.player_mesh.position.y > 0) {
         velocity -= GRAVITY;
@@ -43,6 +73,7 @@ GameEngine.prototype.update = function() {
         WORLD.player_mesh.position.y = 0;
         velocity = 0;
     }
+
     WORLD.stats.update();
 }
 

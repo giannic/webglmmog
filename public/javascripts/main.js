@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    var socket = io.connect();
     var id;
     var light;
 
@@ -14,29 +15,25 @@ $(document).ready(function() {
     /*
      * emitted data: {"id":id, "pos":[x,y,z]}
      */
-    $(document).keypress(function(e) {
+    $(document).keydown(function(e) {
         var k;
         e.preventDefault();
 
-        k = (e.keyCode ? e.keyCode : e.which)
+        k = (e.keyCode ? e.keyCode : e.which);
+        keys[k] = true;
 
-        if (k === DIRECTION.FORWARD) {
-            WORLD.player_mesh.translateZ(-MOVE_VELOCITY);
-        } else if (k === DIRECTION.BACK) {
-            WORLD.player_mesh.translateZ(MOVE_VELOCITY);
-        } else if (k === DIRECTION.LEFT) {
-            WORLD.player_mesh.translateX(-MOVE_VELOCITY);
-        } else if (k === DIRECTION.RIGHT) {
-            WORLD.player_mesh.translateX(MOVE_VELOCITY);
-        } else if (k === DIRECTION.JUMP) {
-            velocity = JUMP_VELOCITY;
-        }
-
-        // the id and position
+       // the id and position
         socket.emit('keypress', {"id": id,
                                  "pos": [WORLD.player_mesh.position.x,
                                          WORLD.player_mesh.position.y,
                                          WORLD.player_mesh.position.z]});
+    }).keyup(function(e) {
+        var k;
+        e.preventDefault();
+        k = (e.keyCode ? e.keyCode : e.which);
+        if (k in keys) {
+            keys[k] = false;
+        }
     });
 
     //$(document).mousemove(function(e) { // this is different?
@@ -83,12 +80,10 @@ $(document).ready(function() {
         WORLD.scene.add(game.entities[game.entities.length-1]);
     });
 
-    /*
     socket.on('disconnect', function() {
-        alert('Damn, connection broken.');
-        socket.emit('playerDisconnect', {id: me});
+        alert('Damn, connection broken.' + id);
+        socket.emit('playerDisconnect', {"id": id});
     });
-    */
 
     /*
      * data: {"id":id, "pos":[x,y,z]}

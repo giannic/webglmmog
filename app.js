@@ -1,14 +1,6 @@
 /**
  * Global Constants
  */
-var VELOCITY = 50;
-var DIRECTION = {
-    LEFT: 97,
-    FORWARD: 119,
-    RIGHT: 100,
-    BACK: 115,
-    JUMP: 32
-};
 
 var current_id = 0;
 var entities = [];
