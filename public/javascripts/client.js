@@ -81,7 +81,6 @@ function emit_attack() {
                                  new THREE.Mesh(WORLD.bullet_geometry,
                                                 WORLD.bullet_material))
                      );
-    game.bullets[game.bullets.length-1].mesh.position.copy(WORLD.player_mesh.position);
+    game.bullets[game.bullets.length-1].mesh.position.copy(WORLD.player.mesh.position);
     WORLD.scene.add(game.bullets[game.bullets.length-1].mesh);
-    console.log("attacking");
 }

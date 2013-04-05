@@ -43,34 +43,31 @@ GameEngine.prototype.draw = function(callback) {
 
 GameEngine.prototype.update = function() {
     if (keys[KEY.FORWARD]) {
-        WORLD.player_mesh.translateZ(-MOVE_VELOCITY);
+        WORLD.player.mesh.translateZ(-MOVE_VELOCITY);
     }
 
     if (keys[KEY.BACK]) {
-        WORLD.player_mesh.translateZ(MOVE_VELOCITY);
+        WORLD.player.mesh.translateZ(MOVE_VELOCITY);
     }
 
     if (keys[KEY.LEFT]) {
-        WORLD.player_mesh.translateX(-MOVE_VELOCITY);
+        WORLD.player.mesh.translateX(-MOVE_VELOCITY);
     }
 
     if (keys[KEY.RIGHT]) {
-        WORLD.player_mesh.translateX(MOVE_VELOCITY);
+        WORLD.player.mesh.translateX(MOVE_VELOCITY);
     }
 
     if (keys[KEY.JUMP]) {
         velocity = JUMP_VELOCITY;
     }
 
-    if (keys[KEY.ATTACK]) {
-        emit_attack();
-    }
+    WORLD.player.mesh.position.y += velocity;
 
-    WORLD.player_mesh.position.y += velocity;
-    if (WORLD.player_mesh.position.y > 0) {
+    if (WORLD.player.mesh.position.y > 0) {
         velocity -= GRAVITY;
-    } else if (WORLD.player_mesh.position.y <= 0) {
-        WORLD.player_mesh.position.y = 0;
+    } else if (WORLD.player.mesh.position.y <= 0) {
+        WORLD.player.mesh.position.y = 0;
         velocity = 0;
     }
 

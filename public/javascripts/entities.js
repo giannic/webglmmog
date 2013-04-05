@@ -8,10 +8,9 @@
 /*
  * Entity
  */
-function Entity(game, x, y) {
+function Entity(game, mesh) {
     this.game = game;
-    this.x = x;
-    this.y = y;
+    this.mesh = mesh;
     this.removeFromWorld = false;
 }
 
@@ -26,8 +25,8 @@ Entity.prototype.draw = function() {
  * Player
  */
 function Player() {}
-function Player(game, id, x, y, active) {
-    Entity.call(this, game, x, y);
+function Player(game, id, mesh, active) {
+    Entity.call(this, game, mesh);
     this.id = id;
     this.active = active;
 }
@@ -48,7 +47,7 @@ Player.prototype.draw = function(ctx) {
  */
 function Bulllet() {}
 function Bullet(game, velocity, mesh) {
-    Entity.call(this, game);
+    Entity.call(this, game, mesh);
     this.v = velocity;
     this.mesh = mesh;
 }

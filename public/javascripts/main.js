@@ -24,9 +24,9 @@ $(document).ready(function() {
 
        // the id and position
         socket.emit('keypress', {"id": id,
-                                 "pos": [WORLD.player_mesh.position.x,
-                                         WORLD.player_mesh.position.y,
-                                         WORLD.player_mesh.position.z]});
+                                 "pos": [WORLD.player.mesh.position.x,
+                                         WORLD.player.mesh.position.y,
+                                         WORLD.player.mesh.position.z]});
     }).keyup(function(e) {
         var k;
         e.preventDefault();
@@ -34,6 +34,10 @@ $(document).ready(function() {
         if (k in keys) {
             keys[k] = false;
         }
+    });
+
+    $(document).click(function(e) {
+        emit_attack();
     });
 
     //$(document).mousemove(function(e) { // this is different?
@@ -44,8 +48,8 @@ $(document).ready(function() {
         moveX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
         moveY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
 
-        WORLD.player_mesh.rotation.y -= moveX*0.01;
-        //WORLD.player_mesh.rotation.x -= moveY*0.01;
+        WORLD.player.mesh.rotation.y -= moveX*0.01;
+        //WORLD.player.mesh.rotation.x -= moveY*0.01;
     });
 
     socket.on('setupComplete', function(assigned_id) {
@@ -61,23 +65,47 @@ $(document).ready(function() {
      */
     socket.on('setupPlayers', function(server_entities) {
         for (var p in server_entities) {
+            game.entities.push(new Player(game, p,
+                               new THREE.Mesh(WORLD.player_geometry,
+                                              WORLD.player_material),
+                               true));
+
+            game.entities[p].mesh.position.x = server_entities[p][0];
+            game.entities[p].mesh.position.z = server_entities[p][1];
+            game.entities[p].mesh.castShadow = true;
+            game.entities[p].mesh.receiveShadow = true;
+            WORLD.scene.add(game.entities[p].mesh);
+            /*
             game.entities.push(new THREE.Mesh(WORLD.player_geometry, WORLD.player_material));
             game.entities[game.entities.length-1].position.x = server_entities[p][0];
             game.entities[game.entities.length-1].position.z = server_entities[p][1];
             game.entities[game.entities.length-1].castShadow = true;
             game.entities[game.entities.length-1].receiveShadow = true;
             WORLD.scene.add(game.entities[game.entities.length-1]);
+            */
         }
-        WORLD.player_mesh = game.entities[game.entities.length-1];
-        WORLD.player_mesh.add(WORLD.camera);
+        //WORLD.player_mesh = game.entities[game.entities.length-1];
+        WORLD.player = game.entities[game.entities.length-1];
+        WORLD.player.mesh.add(WORLD.camera);
     });
 
-    socket.on('addPlayer', function(data) {
+    socket.on('addPlayer', function(new_id) {
+        game.entities.push(new Player(game, new_id,
+                           new THREE.Mesh(WORLD.player_geometry,
+                                          WORLD.player_material),
+                           true));
+
+        game.entities[game.entities.length-1].castShadow = true;
+        game.entities[game.entities.length-1].receiveShadow = true;
+        /*
         game.entities.push(new THREE.Mesh(WORLD.player_geometry, WORLD.player_material));
         game.entities[game.entities.length-1].castShadow = true;
         game.entities[game.entities.length-1].receiveShadow = true;
+        */
 
-        WORLD.scene.add(game.entities[game.entities.length-1]);
+        WORLD.scene.add(game.entities[game.entities.length-1].mesh);
+
+        // WORLD.scene.add(game.entities[game.entities.length-1]);
     });
 
     socket.on('disconnect', function() {
@@ -91,8 +119,8 @@ $(document).ready(function() {
     socket.on('updatePlayer', function(data) {
         var id = data.id;
 
-        game.entities[id].position.x = data.pos[0];
-        game.entities[id].position.y = data.pos[1];
-        game.entities[id].position.z = data.pos[2];
+        game.entities[id].mesh.position.x = data.pos[0];
+        game.entities[id].mesh.position.y = data.pos[1];
+        game.entities[id].mesh.position.z = data.pos[2];
     });
 });
