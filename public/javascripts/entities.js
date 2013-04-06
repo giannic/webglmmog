@@ -48,8 +48,9 @@ Player.prototype.draw = function(ctx) {
 function Bulllet() {}
 function Bullet(game, velocity, mesh) {
     Entity.call(this, game, mesh);
-    this.v = velocity;
+    this.velocity = velocity;
     this.mesh = mesh;
+    this.life = BULLET_LIFE;
 }
 
 Bullet.prototype = new Entity();

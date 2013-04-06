@@ -74,13 +74,29 @@ function detect_collisions() {
     }
 }
 
+/*
+ * Launch a bullet from this player
+ */
 function emit_attack() {
-    var bullet = new Bullet();
+    var v = new THREE.Vector3(0,0,-1);
+    //var pWorld = WORLD.camera.matrixWorld.multiplyVector3(v);
+    v = v.applyMatrix4(WORLD.camera.matrixWorld);
+    //v.applyMatrix4(WORLD.camera.matrixWorld);
+    //var dir = v.sub(WORLD.camera.position).normalize();
+    var dir = new THREE.Vector3(0,0,0);
+    dir.copy(WORLD.player.mesh.position);
+    dir.sub(v).setLength(BULLET_VELOCITY);
+    //var dir = WORLD.player.mesh.position.sub(v).normalize();
+    //v.applyEuler(WORLD.camera.rotation, WORLD.camera.eulerOrder);
+    console.log(dir);
+
     game.bullets.push(new Bullet(game,
-                                 new THREE.Vector3(1, 1, 0),
+                                 dir,
+                                 //new THREE.Vector3(1, 0, 1),
                                  new THREE.Mesh(WORLD.bullet_geometry,
                                                 WORLD.bullet_material))
                      );
+
     game.bullets[game.bullets.length-1].mesh.position.copy(WORLD.player.mesh.position);
     WORLD.scene.add(game.bullets[game.bullets.length-1].mesh);
 }

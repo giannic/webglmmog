@@ -13,14 +13,16 @@ var velocity = 0,
     JUMP_VELOCITY = 50,
     MOVE_VELOCITY = 15,
     GRAVITY = 6,
+    BULLET_LIFE = 100,
+    BULLET_VELOCITY = 10,
     KEY = {
         LEFT: 65,
         FORWARD: 87,
         RIGHT: 68,
         BACK: 83,
         JUMP: 32,
-        ATTACK: 13
     };
+
 
 // KEYY PRESSES
 var keys = {};

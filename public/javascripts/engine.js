@@ -71,7 +71,24 @@ GameEngine.prototype.update = function() {
         velocity = 0;
     }
 
+    this.updateBullets();
+
     WORLD.stats.update();
+}
+
+GameEngine.prototype.updateBullets = function() {
+    for (var b in this.bullets) {
+        this.bullets[b].life -= 1;
+        if (this.bullets[b].life > 0) {
+            this.bullets[b].mesh.position.x += this.bullets[b].velocity.x;
+            this.bullets[b].mesh.position.z += this.bullets[b].velocity.z;
+            //bullets[b].mesh.position.y += bullets[b].velocity.y;
+        }
+    }
+}
+
+GameEngine.prototype.checkCollisions = function() {
+
 }
 
 GameEngine.prototype.addEntity = function(entity) {

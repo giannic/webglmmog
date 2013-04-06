@@ -4,6 +4,7 @@
 
 var current_id = 0;
 var entities = [];
+var bullets = [];
 
 /**
  * Module dependencies.
