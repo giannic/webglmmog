@@ -40,7 +40,6 @@ $(document).ready(function() {
         emit_attack();
     });
 
-    //$(document).mousemove(function(e) { // this is different?
     document.addEventListener("mousemove", function (e) {
         var moveX, moveY;
         var theta = Math.PI/360.0;
@@ -75,16 +74,7 @@ $(document).ready(function() {
             game.entities[p].mesh.castShadow = true;
             game.entities[p].mesh.receiveShadow = true;
             WORLD.scene.add(game.entities[p].mesh);
-            /*
-            game.entities.push(new THREE.Mesh(WORLD.player_geometry, WORLD.player_material));
-            game.entities[game.entities.length-1].position.x = server_entities[p][0];
-            game.entities[game.entities.length-1].position.z = server_entities[p][1];
-            game.entities[game.entities.length-1].castShadow = true;
-            game.entities[game.entities.length-1].receiveShadow = true;
-            WORLD.scene.add(game.entities[game.entities.length-1]);
-            */
         }
-        //WORLD.player_mesh = game.entities[game.entities.length-1];
         WORLD.player = game.entities[game.entities.length-1];
         WORLD.player.mesh.add(WORLD.camera);
     });
@@ -97,15 +87,8 @@ $(document).ready(function() {
 
         game.entities[game.entities.length-1].castShadow = true;
         game.entities[game.entities.length-1].receiveShadow = true;
-        /*
-        game.entities.push(new THREE.Mesh(WORLD.player_geometry, WORLD.player_material));
-        game.entities[game.entities.length-1].castShadow = true;
-        game.entities[game.entities.length-1].receiveShadow = true;
-        */
 
         WORLD.scene.add(game.entities[game.entities.length-1].mesh);
-
-        // WORLD.scene.add(game.entities[game.entities.length-1]);
     });
 
     socket.on('disconnect', function() {

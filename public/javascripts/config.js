@@ -9,11 +9,13 @@ var WORLD = {
 };
 
 // CONSTANTS
-var velocity = 0,
+var PLAYER_RADIUS = 20,
+    velocity = 0,
     JUMP_VELOCITY = 50,
     MOVE_VELOCITY = 15,
     GRAVITY = 6,
     BULLET_LIFE = 100,
+    BULLET_RADIUS = 5,
     BULLET_VELOCITY = 10,
     KEY = {
         LEFT: 65,

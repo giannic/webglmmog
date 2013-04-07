@@ -27,11 +27,13 @@ function init_world() {
 
     // player config
     WORLD.player_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
-    WORLD.player_geometry = new THREE.SphereGeometry(20, 10, 10);
+    WORLD.player_geometry = new THREE.SphereGeometry(PLAYER_RADIUS, 10, 10);
+
+    WORLD.player_material_hit = new THREE.MeshLambertMaterial({color: 0xFF0000});
 
     // bullets config
     WORLD.bullet_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
-    WORLD.bullet_geometry = new THREE.SphereGeometry(5, 10, 10);
+    WORLD.bullet_geometry = new THREE.SphereGeometry(BULLET_RADIUS, 10, 10);
 
     WORLD.scene.add(light);
     WORLD.scene.add(WORLD.plane_mesh);
