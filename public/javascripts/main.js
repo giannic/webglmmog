@@ -1,7 +1,6 @@
 $(document).ready(function() {
     var socket = io.connect();
     var id;
-    var light;
 
     game = new Game();
     game.init();
@@ -65,8 +64,9 @@ $(document).ready(function() {
     socket.on('setupPlayers', function(server_entities) {
         for (var p in server_entities) {
             game.entities.push(new Player(game, p,
-                               new THREE.Mesh(WORLD.player_geometry,
-                                              WORLD.player_material),
+                               WORLD.player_geometry,
+                               //new THREE.Mesh(WORLD.player_geometry,
+                                              //WORLD.player_material),
                                true));
 
             game.entities[p].mesh.position.x = server_entities[p][0];
@@ -81,8 +81,9 @@ $(document).ready(function() {
 
     socket.on('addPlayer', function(new_id) {
         game.entities.push(new Player(game, new_id,
-                           new THREE.Mesh(WORLD.player_geometry,
-                                          WORLD.player_material),
+                           WORLD.player_geometry,
+                           //new THREE.Mesh(WORLD.player_geometry,
+                                          //WORLD.player_material),
                            true));
 
         game.entities[game.entities.length-1].castShadow = true;

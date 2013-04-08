@@ -21,6 +21,7 @@ GameEngine.prototype.init = function() {
     WORLD.renderer.setSize(window.innerWidth, window.innerHeight);
     WORLD.renderer.clear();
     WORLD.renderer.shadowMapEnabled = true;
+    WORLD.renderer.shadowMapSoft = true;
     WORLD.renderer.setClearColorHex(0xEEEEEE, 1.0);
     document.body.appendChild(WORLD.renderer.domElement);
 }
