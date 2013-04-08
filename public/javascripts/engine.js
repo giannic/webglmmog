@@ -77,6 +77,10 @@ GameEngine.prototype.update = function() {
         WORLD.player.mesh.position.y = 0;
         velocity = 0;
     }
+    if (move_x) {
+        WORLD.player.mesh.rotation.y -= move_x*0.01;
+        move_x = 0;
+    }
 
     this.updateBullets();
     this.checkCollisions();

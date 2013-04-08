@@ -1,3 +1,7 @@
+// PATHS
+var OBJ_PATH = "../obj/",
+    IMG_PATH = "../images/";
+
 var WORLD = {
     stats:0,
     game:0,
@@ -16,7 +20,7 @@ var PLAYER_RADIUS = 20,
 
     BULLET_LIFE = 100,
     BULLET_RADIUS = 5,
-    BULLET_VELOCITY = 10,
+    BULLET_VELOCITY = 20,
     BULLET_SEG_X = 5,
     BULLET_SEG_Y = 5,
 
@@ -24,7 +28,7 @@ var PLAYER_RADIUS = 20,
     JUMP_VELOCITY = 50,
     MOVE_VELOCITY = 15,
     GRAVITY = 6,
-    ENV_SIZE = 10000,
+    ENV_SIZE = 20000,
 
     KEY = {
         LEFT: 65,
@@ -43,3 +47,6 @@ keys[KEY.LEFT] = false;
 keys[KEY.RIGHT] = false;
 keys[KEY.JUMP] = false;
 keys[KEY.ATTACK] = false;
+
+// MOUSE MOVE
+var move_x, move_y;

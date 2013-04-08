@@ -40,14 +40,12 @@ $(document).ready(function() {
     });
 
     document.addEventListener("mousemove", function (e) {
-        var moveX, moveY;
         var theta = Math.PI/360.0;
 
-        moveX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
-        moveY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
+        move_x = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+        move_y = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
 
         //WORLD.player_geometry.rotation.y -= moveX*0.01;
-        WORLD.player.mesh.rotation.y -= moveX*0.01;
         //WORLD.player.mesh.rotation.x -= moveY*0.01;
     });
 

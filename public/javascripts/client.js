@@ -14,7 +14,7 @@ function init_world() {
 
     init_light();
 
-    //init_landscape();
+    init_landscape();
 
     // player params
     init_player();
@@ -38,15 +38,14 @@ function init_landscape() {
 }
 
 function init_environment() {
-    var url_prefix = "../images/",
-        format = ".jpg";
+    var format = ".jpg";
     var urls = [
-        url_prefix + 'skybox_xpos' + format,
-        url_prefix + 'skybox_xneg' + format,
-        url_prefix + 'skybox_ypos' + format,
-        url_prefix + 'skybox_yneg' + format,
-        url_prefix + 'skybox_zpos' + format,
-        url_prefix + 'skybox_zneg' + format
+        IMG_PATH + 'skybox_xpos' + format,
+        IMG_PATH + 'skybox_xneg' + format,
+        IMG_PATH + 'skybox_ypos' + format,
+        IMG_PATH + 'skybox_yneg' + format,
+        IMG_PATH + 'skybox_zpos' + format,
+        IMG_PATH + 'skybox_zneg' + format
     ];
 
     var cubemap = THREE.ImageUtils.loadTextureCube(urls);
@@ -107,7 +106,7 @@ function init_client() {
     element.requestPointerLock();
     */
 
-    WORLD.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
+    WORLD.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, ENV_SIZE);
     WORLD.camera.useQuaternion = true;
     WORLD.camera.position.z = 500;
     WORLD.camera.position.y = 100;
@@ -123,14 +122,12 @@ function init_player() {
     WORLD.player_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
     WORLD.player_material_hit = new THREE.MeshLambertMaterial({color: 0xFF0000});
 
-    var OBJ_PATH = "../obj/";
     loader = new THREE.OBJMTLLoader();
     loader.addEventListener('load', function(event) {
         //object.rotation.y = Math.PI / 2;
         var object = event.content;
         object.position.y = 10;
         WORLD.player_geometry = object;
-        console.log(WORLD.player_geometry);
     });
     loader.load(OBJ_PATH + "Feisar_Ship01.obj",
                 OBJ_PATH + "Feisar_Ship01.mtl");
