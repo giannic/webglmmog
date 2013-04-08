@@ -43,9 +43,11 @@ GameEngine.prototype.draw = function(callback) {
 }
 
 GameEngine.prototype.update = function() {
+    /*
     for (var p in this.entities) {
         this.entities[p].mesh.material = WORLD.player_material;
     }
+    */
 
     if (keys[KEY.FORWARD]) {
         WORLD.player.mesh.translateZ(-MOVE_VELOCITY);
@@ -97,8 +99,11 @@ GameEngine.prototype.checkCollisions = function() {
     var diff = new THREE.Vector3();
     for (var p in this.entities) {
         for (var b in this.bullets) {
-            diff.subVectors(this.entities[p].mesh.position,
-                            this.bullets[b].mesh.position);
+            //r57
+            //diff.subVectors(this.entities[p].mesh.position,
+                            //this.bullets[b].mesh.position);
+            diff.sub(this.entities[p].mesh.position,
+                     this.bullets[b].mesh.position);
             if (this.entities[p] !== WORLD.player &&
                 diff.length() < PLAYER_RADIUS + BULLET_RADIUS) {
                 // for now, set hit to red

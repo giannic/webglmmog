@@ -1,0 +1,4 @@
+*.obj -diff
+*.mtl -diff
+*.png -diff
+*.jpg -diff

@@ -1,8 +1,4 @@
 webglmmog
 =========
 
-Alpha Review Demo Plan
-
-
-To run:
-node app
+Currently using: THREE.js r54

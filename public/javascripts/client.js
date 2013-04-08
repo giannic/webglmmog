@@ -14,7 +14,18 @@ function init_world() {
 
     init_light();
 
-    // landscape
+    //init_landscape();
+
+    // player params
+    init_player();
+
+    // bullets config
+    WORLD.bullet_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
+    WORLD.bullet_geometry = new THREE.SphereGeometry(BULLET_RADIUS, BULLET_SEG_X, BULLET_SEG_Y);
+
+}
+
+function init_landscape() {
     WORLD.plane_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
     WORLD.plane_geometry = new THREE.PlaneGeometry(6000, 6000, 100, 100);
     WORLD.plane_mesh = new THREE.Mesh(WORLD.plane_geometry, WORLD.plane_material);
@@ -23,58 +34,59 @@ function init_world() {
     WORLD.plane_mesh.position.y = -20;
     WORLD.plane_mesh.receiveShadow = true;
 
-    // player params
-    init_player();
-
-
-    // bullets config
-    WORLD.bullet_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
-    WORLD.bullet_geometry = new THREE.SphereGeometry(BULLET_RADIUS, BULLET_SEG_X, BULLET_SEG_Y);
-
     WORLD.scene.add(WORLD.plane_mesh);
 }
 
 function init_environment() {
-    var url_prefix = "../images/";
+    var url_prefix = "../images/",
+        format = ".jpg";
     var urls = [
-        url_prefix + 'skybox_xpos.jpg',
-        url_prefix + 'skybox_xneg.jpg',
-        url_prefix + 'skybox_ypos.jpg',
-        url_prefix + 'skybox_yneg.jpg',
-        url_prefix + 'skybox_zpos.jpg',
-        url_prefix + 'skybox_zneg.jpg'
-    ],
+        url_prefix + 'skybox_xpos' + format,
+        url_prefix + 'skybox_xneg' + format,
+        url_prefix + 'skybox_ypos' + format,
+        url_prefix + 'skybox_yneg' + format,
+        url_prefix + 'skybox_zpos' + format,
+        url_prefix + 'skybox_zneg' + format
+    ];
 
-    cubemap = THREE.ImageUtils.loadTextureCube(urls);
+    var cubemap = THREE.ImageUtils.loadTextureCube(urls);
     cubemap.format = THREE.RGBFormat;
 
-    var shader = THREE.ShaderLib["cube"];
-    //var uniforms = THREE.UniformsUtils.clone(shader.uniforms);
-    var uniforms = shader.uniforms;
-    uniforms['tCube'].texture = cubemap;
+    //var shader = THREE.ShaderLib["cube"];
+    var shader = THREE.ShaderUtils.lib["cube"];
+    shader.uniforms["tCube"].value = cubemap;
 
     var material = new THREE.ShaderMaterial({
         fragmentShader: shader.fragmentShader,
         vertexShader: shader.vertexShader,
-        uniforms: uniforms
+        uniforms: shader.uniforms,
+        depthWrite: false,
+        side: THREE.BackSide
     });
 
     var env = new THREE.Mesh(new THREE.CubeGeometry(
-                                     ENV_SIZE, ENV_SIZE, ENV_SIZE,
-                                     1, 1, 1),
+                                     ENV_SIZE, ENV_SIZE, ENV_SIZE),
                              material)
-
-    env.doubleSided = true;
 
     WORLD.scene.add(env);
 }
 
 function init_light() {
+    /*
+    var ambient = new THREE.AmbientLight(0xffffff);
+    WORLD.scene.add(ambient);
+
+    var point = new THREE.PointLight(0xffffff, 2);
+    WORLD.scene.add(point);
+    */
+
     // lighting
-    // WORLD.light = new THREE.SpotLight(0xEEFFFF);
-    // WORLD.light.position.set(170, 2030, -160);
-    // WORLD.light.castShadow = true;
-    // WORLD.light.intensity = 0.7;
+    //var light = new THREE.SpotLight(0xFFFFFF);
+    var light = new THREE.SpotLight();
+    //light.position.set(170, 2030, -160);
+    light.position.set(0, 500, 0);
+    light.castShadow = true;
+    light.intensity = 0.7;
 
     WORLD.light = new THREE.DirectionalLight(0xEEFFFF);
     WORLD.light.position.set(1, 5, 1);
@@ -82,6 +94,7 @@ function init_light() {
     WORLD.light.intensity = 0.8;
 
     WORLD.scene.add(WORLD.light);
+    WORLD.scene.add(light);
 }
 
 function init_client() {
@@ -98,7 +111,6 @@ function init_client() {
     WORLD.camera.useQuaternion = true;
     WORLD.camera.position.z = 500;
     WORLD.camera.position.y = 100;
-    //WORLD.scene.add(WORLD.camera);
 }
 
 function init_player() {
@@ -111,13 +123,17 @@ function init_player() {
     WORLD.player_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
     WORLD.player_material_hit = new THREE.MeshLambertMaterial({color: 0xFF0000});
 
-    loader = new THREE.OBJLoader();
-    //loader.load("../obj/Spaceship01.obj", function(object) {
-    loader.load("../obj/Spaceship01.obj", function(object) {
-        object.rotation.y = Math.PI / 2;
+    var OBJ_PATH = "../obj/";
+    loader = new THREE.OBJMTLLoader();
+    loader.addEventListener('load', function(event) {
+        //object.rotation.y = Math.PI / 2;
+        var object = event.content;
         object.position.y = 10;
         WORLD.player_geometry = object;
+        console.log(WORLD.player_geometry);
     });
+    loader.load(OBJ_PATH + "Feisar_Ship01.obj",
+                OBJ_PATH + "Feisar_Ship01.mtl");
 }
 
 // currently not in use
@@ -146,10 +162,14 @@ function detect_collisions() {
  */
 function emit_attack() {
     var v = new THREE.Vector3(0,0,-1);
-    v = v.applyMatrix4(WORLD.camera.matrixWorld);
+    // r57
+    //v = v.applyMatrix4(WORLD.camera.matrixWorld);
+    v = WORLD.camera.matrixWorld.multiplyVector3(v);
     var dir = new THREE.Vector3(0,0,0);
     dir.copy(WORLD.player.mesh.position);
-    dir.sub(v).setLength(BULLET_VELOCITY);
+    //r57
+    //dir.sub(v).setLength(BULLET_VELOCITY);
+    dir.subSelf(v).setLength(BULLET_VELOCITY);
 
     game.bullets.push(new Bullet(game,
                                  dir,

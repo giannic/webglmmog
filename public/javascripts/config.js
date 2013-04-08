@@ -24,7 +24,7 @@ var PLAYER_RADIUS = 20,
     JUMP_VELOCITY = 50,
     MOVE_VELOCITY = 15,
     GRAVITY = 6,
-    ENV_SIZE = 500,
+    ENV_SIZE = 10000,
 
     KEY = {
         LEFT: 65,
@@ -35,7 +35,7 @@ var PLAYER_RADIUS = 20,
     };
 
 
-// KEYY PRESSES
+// KEY PRESSES
 var keys = {};
 keys[KEY.FORWARD] = false;
 keys[KEY.BACK] = false;

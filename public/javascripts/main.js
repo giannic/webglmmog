@@ -46,6 +46,7 @@ $(document).ready(function() {
         moveX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
         moveY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
 
+        //WORLD.player_geometry.rotation.y -= moveX*0.01;
         WORLD.player.mesh.rotation.y -= moveX*0.01;
         //WORLD.player.mesh.rotation.x -= moveY*0.01;
     });
