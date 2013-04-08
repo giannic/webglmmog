@@ -2,21 +2,21 @@ function init_stats() {
     WORLD.stats = new Stats();
     WORLD.stats.domElement.style.position = 'absolute';
     WORLD.stats.domElement.style.top = '0px';
+    WORLD.stats.domElement.style.left = '0px';
     document.body.appendChild(WORLD.stats.domElement);
 }
 
 function init_world() {
     // scene
     WORLD.scene = new THREE.Scene();
-    WORLD.scene.fog = new THREE.FogExp2(0xFFFFFF, 0.0006);
+    WORLD.scene.fog = new THREE.FogExp2(0x000000, 0.0006);
 
     init_environment();
 
     init_light();
 
-    init_landscape();
+    //init_landscape();
 
-    // player params
     init_player();
 
     // bullets config
@@ -71,29 +71,12 @@ function init_environment() {
 }
 
 function init_light() {
-    /*
-    var ambient = new THREE.AmbientLight(0xffffff);
-    WORLD.scene.add(ambient);
-
-    var point = new THREE.PointLight(0xffffff, 2);
-    WORLD.scene.add(point);
-    */
-
-    // lighting
-    //var light = new THREE.SpotLight(0xFFFFFF);
-    var light = new THREE.SpotLight();
-    //light.position.set(170, 2030, -160);
-    light.position.set(0, 500, 0);
-    light.castShadow = true;
-    light.intensity = 0.7;
-
     WORLD.light = new THREE.DirectionalLight(0xEEFFFF);
-    WORLD.light.position.set(1, 5, 1);
+    WORLD.light.position.set(1, 10, 1);
     WORLD.light.castShadow = true;
     WORLD.light.intensity = 0.8;
 
     WORLD.scene.add(WORLD.light);
-    WORLD.scene.add(light);
 }
 
 function init_client() {
@@ -114,23 +97,31 @@ function init_client() {
 
 function init_player() {
     /*
-    WORLD.player_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
-    WORLD.player_material_hit = new THREE.MeshLambertMaterial({color: 0xFF0000});
     WORLD.player_geometry = new THREE.SphereGeometry(PLAYER_RADIUS, PLAYER_SEG_X, PLAYER_SEG_Y);
     */
-    var loader;
     WORLD.player_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
     WORLD.player_material_hit = new THREE.MeshLambertMaterial({color: 0xFF0000});
 
+    var loader;
+
+    loader = new THREE.BinaryLoader(true);
+    //document.body.appendChild(loader.statusDomElement);
+    loader.load(OBJ_PATH + "Feisar_Ship01.js", function(object) {
+        WORLD.player_geometry = object;
+        //loader.statusDomElement.style.display = "none";
+    });
+
+    // used with OBJMTLoader
+    /*
     loader = new THREE.OBJMTLLoader();
     loader.addEventListener('load', function(event) {
-        //object.rotation.y = Math.PI / 2;
         var object = event.content;
         object.position.y = 10;
         WORLD.player_geometry = object;
     });
     loader.load(OBJ_PATH + "Feisar_Ship01.obj",
                 OBJ_PATH + "Feisar_Ship01.mtl");
+    */
 }
 
 // currently not in use
