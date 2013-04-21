@@ -49,26 +49,22 @@ GameEngine.prototype.update = function() {
 
 GameEngine.prototype.updateMyself = function() {
     if (keys[KEY.FORWARD]) {
-        WORLD.player.mesh.translateZ(-MOVE_VELOCITY);
+        WORLD.player.mesh.translateZ(-PLAYER_VELOCITY);
     }
 
     if (keys[KEY.BACK]) {
-        WORLD.player.mesh.translateZ(MOVE_VELOCITY);
+        WORLD.player.mesh.translateZ(PLAYER_VELOCITY);
     }
 
     if (keys[KEY.LEFT]) {
-        WORLD.player.mesh.translateX(-MOVE_VELOCITY);
+        WORLD.player.mesh.translateX(-PLAYER_VELOCITY);
     }
 
     if (keys[KEY.RIGHT]) {
-        WORLD.player.mesh.translateX(MOVE_VELOCITY);
+        WORLD.player.mesh.translateX(PLAYER_VELOCITY);
     }
 
     /*
-    if (keys[KEY.JUMP]) {
-        velocity = JUMP_VELOCITY;
-    }
-
     WORLD.player.mesh.position.y += velocity;
 
     if (WORLD.player.mesh.position.y > 0) {
@@ -83,13 +79,21 @@ GameEngine.prototype.updateMyself = function() {
         WORLD.player.mesh.rotation.y -= move_x*0.01;
         move_x = 0;
     }
+
+    // clear active keys on each update frame
+    /*
+    for (var k in keys) {
+        keys[k] = false;
+    }
+    */
 }
 
 GameEngine.prototype.updatePlayers = function() {
     $.each(this.entities_updates, function(idx, update) {
-        game.entities[update.id].mesh.position.x = update.pos.x;
-        game.entities[update.id].mesh.position.y = update.pos.y;
-        game.entities[update.id].mesh.position.z = update.pos.z;
+        // using velocity now
+        game.entities[update.id].mesh.position.x += update.dir.x;
+        //game.entities[update.id].mesh.position.y += update.dir.y;
+        game.entities[update.id].mesh.position.z += update.dir.z;
     });
     this.entities_updates.length = 0; // clear updates for this frame
 }

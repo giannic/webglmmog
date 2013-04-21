@@ -77,17 +77,14 @@ io.sockets.on('connection', function (client) {
         player.pos.y = player_data.pos.y;
         player.pos.z = player_data.pos.z;
 
-        /*
-        player.dir[0] = player_data.dir[0];
-        player.dir[1] = player_data.dir[1];
-        player.dir[2] = player_data.dir[2];
-        */
+        player.dir.x = player_data.dir.x;
+        player.dir.y = player_data.dir.y;
+        player.dir.z = player_data.dir.z;
 
         client.broadcast.emit('updatePlayer', player_data);
     });
 
-    client.on('keydown', function (player_data) {
-
+    client.on('mousemove', function (data) {
+        client.broadcast.emit('updatePlayerRotation', data);
     });
-
 });

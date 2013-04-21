@@ -29,7 +29,7 @@ $(document).ready(function() {
 
             // id: player_id
             // dir: direction player is facing
-            dir = get_my_direction();
+            dir = get_my_direction(); // returns Vector3
             pos = {"x": WORLD.player.mesh.position.x,
                    "y": WORLD.player.mesh.position.y,
                    "z": WORLD.player.mesh.position.z};
@@ -83,6 +83,7 @@ $(document).ready(function() {
     function moveCallback(e) {
         move_x = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
         move_y = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
+        socket.emit("mousemove", {"id": id, "move_x": move_x});
     }
 
     document.addEventListener('pointerlockchange', changeCallback, false);
@@ -105,14 +106,14 @@ $(document).ready(function() {
      * Loads all the connected players from the central server
      */
     socket.on('setupPlayers', function(server_entities) {
-        if (ASSERT.geometry_loaded === 0) {console.log("failed to load geometry")};
         for (var p in server_entities) {
             game.entities.push(
                 new Player(game,
                            p,
                            new THREE.Mesh(WORLD.player_geometry,
                                           WORLD.player_material),
-                           new THREE.Vector3(0,0,0),
+                           new THREE.Vector3(0,0,0), // direction
+                           0, // velocity
                            true));
 
             game.entities[p].mesh.position.x = server_entities[p].pos.x;
@@ -129,7 +130,8 @@ $(document).ready(function() {
         game.entities.push(new Player(game, new_id,
                            new THREE.Mesh(WORLD.player_geometry,
                                           WORLD.player_material),
-                           new THREE.Vector3(0,0,0),
+                           new THREE.Vector3(0,0,0), // direction
+                           0, // velocity
                            true));
 
         game.entities[game.entities.length-1].mesh.castShadow = true;
@@ -163,5 +165,9 @@ $(document).ready(function() {
         game.entities[id].dir.y = data.dir[1];
         game.entities[id].dir.z = data.dir[2];
         */
+    });
+
+    socket.on('updatePlayerRotation', function(data) {
+        game.entities[data.id].mesh.rotation.y -= data.move_x*0.01;
     });
 });

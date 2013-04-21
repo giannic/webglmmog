@@ -109,7 +109,6 @@ function init_player() {
     loader = new THREE.BinaryLoader(true);
     loader.load(OBJ_PATH + "Feisar_Ship01.js", function(object) {
         WORLD.player_geometry = object;
-        ASSERT.geometry_loaded = 1;
         console.log("harrow loading geometry"); // OMGZOR GEOMETRY NOT LOADED
     });
 }

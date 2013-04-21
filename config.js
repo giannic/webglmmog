@@ -19,6 +19,7 @@ var WORLD = {
 var PLAYER_RADIUS = 20,
     PLAYER_SEG_X = 8,
     PLAYER_SEG_Y = 8,
+    PLAYER_VELOCITY = 15,
 
     BULLET_LIFE = 100,
     BULLET_RADIUS = 5,
@@ -26,8 +27,6 @@ var PLAYER_RADIUS = 20,
     BULLET_SEG_X = 5,
     BULLET_SEG_Y = 5,
 
-    JUMP_VELOCITY = 50,
-    MOVE_VELOCITY = 15,
     GRAVITY = 6,
     ENV_SIZE = 20000,
 
@@ -51,8 +50,3 @@ keys[KEY.ATTACK] = false;
 
 // MOUSE MOVE
 var move_x, move_y;
-
-// FAIL SAFES
-var ASSERT = {
-    geometry_loaded:0
-}
