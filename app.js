@@ -38,6 +38,13 @@ app.configure(function(){
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
+    app.use(express.static(path.join(__dirname, '/')));
+
+    //added
+    app.set('log level', 0);
+    app.set('authorization', function (handshakeData, callback) {
+        callback(null, true); // error first callback style
+    });
 });
 
 app.configure('development', function(){
@@ -47,24 +54,23 @@ app.configure('development', function(){
 app.get('/', routes.index);
 app.get('/users', user.list);
 
-// original sockets code
-io.sockets.on('connection', function (socket) {
+io.sockets.on('connection', function (client) {
     // set up just connected player
-    socket.on('client_complete', function() {
+    client.on('client_complete', function() {
         current_id = entities.length;
         entities.push(PLAYER_STRUCT);
         entities[entities.length-1].id = current_id;
 
-        socket.emit('assignID', current_id);
+        client.emit('assignID', current_id);
 
         // need to poll all current locations of players
-        socket.emit('setupPlayers', entities);
-        socket.broadcast.emit('addPlayer', current_id);
-        socket.emit('setupComplete'); // used to ensure mesh arent null
+        client.emit('setupPlayers', entities);
+        client.broadcast.emit('addPlayer', current_id);
+        client.emit('setupComplete'); // used to ensure mesh arent null
     });
 
     // data: {"id":id, "dir":[x,y,z]}
-    socket.on('keydown', function (player_data) {
+    client.on('keydown', function (player_data) {
         var player = entities[player_data.id];
 
         player.pos.x = player_data.pos.x;
@@ -77,12 +83,10 @@ io.sockets.on('connection', function (socket) {
         player.dir[2] = player_data.dir[2];
         */
 
-        console.log(player_data);
-
-        socket.broadcast.emit('updatePlayer', player_data);
+        client.broadcast.emit('updatePlayer', player_data);
     });
 
-    socket.on('keydown', function (player_data) {
+    client.on('keydown', function (player_data) {
 
     });
 

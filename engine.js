@@ -86,9 +86,12 @@ GameEngine.prototype.updateMyself = function() {
 }
 
 GameEngine.prototype.updatePlayers = function() {
-    $.each(this.entities_updates, function(idx, val) {
-        console.log("# VAL ID: " + val.id);
+    $.each(this.entities_updates, function(idx, update) {
+        game.entities[update.id].mesh.position.x = update.pos.x;
+        game.entities[update.id].mesh.position.y = update.pos.y;
+        game.entities[update.id].mesh.position.z = update.pos.z;
     });
+    this.entities_updates.length = 0; // clear updates for this frame
 }
 
 GameEngine.prototype.updateBullets = function() {

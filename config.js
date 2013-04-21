@@ -1,8 +1,8 @@
 var socket;
 
 // PATHS
-var OBJ_PATH = "../obj/",
-    IMG_PATH = "../images/";
+var OBJ_PATH = "public/obj/",
+    IMG_PATH = "public/images/";
 
 var WORLD = {
     stats:0,

@@ -147,12 +147,16 @@ $(document).ready(function() {
      * data: {"id":id, "dir":[x,y,z]}
      */
     socket.on('updatePlayer', function(data) {
-        var their_id = data.id;
+        //var their_id = data.id;
 
+
+        game.entities_updates.push(data);
         // TODO: THIS IS WHERE THE PROBLEM LIES
+        /*
         game.entities[their_id].mesh.position.x = data.pos.x;
         game.entities[their_id].mesh.position.y = data.pos.y;
         game.entities[their_id].mesh.position.z = data.pos.z;
+        */
 
         /*
         game.entities[id].dir.x = data.dir[0];
