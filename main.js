@@ -23,7 +23,7 @@ $(document).ready(function() {
         e.preventDefault();
 
         k = (e.keyCode ? e.keyCode : e.which);
-        if (keys[k] !== true) {
+        //if (keys[k] !== true) {
             var dir;
             keys[k] = true;
 
@@ -33,22 +33,15 @@ $(document).ready(function() {
             pos = {"x": WORLD.player.mesh.position.x,
                    "y": WORLD.player.mesh.position.y,
                    "z": WORLD.player.mesh.position.z};
-            socket.emit('keydown', {"id": id, "pos": pos, "dir": dir});
-        }
+            socket.emit('keydown', {"id": id, "pos": pos, "dir": dir, "keys": keys});
+        //}
     })
     .keyup(function(e) {
         var k;
-        e.preventDefault();
+        //e.preventDefault();
         k = (e.keyCode ? e.keyCode : e.which);
         if (k in keys) {
             keys[k] = false;
-
-            /*
-            socket.emit('keydown', {"id": id,
-                                     "pos": [WORLD.player.mesh.position.x,
-                                             WORLD.player.mesh.position.y,
-                                             WORLD.player.mesh.position.z]});
-                                             */
         }
     })
     .click(function(e) {
@@ -141,13 +134,13 @@ $(document).ready(function() {
     });
 
     socket.on('disconnect', function() {
-        //alert('Damn, connection broken.' + id);
         socket.emit('playerDisconnect', {"id": id});
     });
 
-    /*
-     * data: {"id":id, "dir":[x,y,z]}
-     */
+
+    /**************************
+     * Updating OTHER Players *
+     **************************/
     socket.on('updatePlayer', function(data) {
         //var their_id = data.id;
 
@@ -167,6 +160,8 @@ $(document).ready(function() {
         */
     });
 
+    // this should probably be pushed to entities_updates
+    // instead of being updated here
     socket.on('updatePlayerRotation', function(data) {
         game.entities[data.id].mesh.rotation.y -= data.move_x*0.01;
     });

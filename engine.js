@@ -88,12 +88,28 @@ GameEngine.prototype.updateMyself = function() {
     */
 }
 
+/*
+ * Updates for other players
+ * But, this is essentially the same as update myself for now
+ * Maybe should merge, and take in the player to update instead
+ */
 GameEngine.prototype.updatePlayers = function() {
     $.each(this.entities_updates, function(idx, update) {
-        // using velocity now
-        game.entities[update.id].mesh.position.x += update.dir.x;
-        //game.entities[update.id].mesh.position.y += update.dir.y;
-        game.entities[update.id].mesh.position.z += update.dir.z;
+        if (update.keys[KEY.FORWARD]) {
+            game.entities[update.id].mesh.translateZ(-PLAYER_VELOCITY);
+        }
+
+        if (update.keys[KEY.BACK]) {
+            game.entities[update.id].mesh.translateZ(PLAYER_VELOCITY);
+        }
+
+        if (update.keys[KEY.LEFT]) {
+            game.entities[update.id].mesh.translateX(-PLAYER_VELOCITY);
+        }
+
+        if (update.keys[KEY.RIGHT]) {
+            game.entities[update.id].mesh.translateX(PLAYER_VELOCITY);
+        }
     });
     this.entities_updates.length = 0; // clear updates for this frame
 }
