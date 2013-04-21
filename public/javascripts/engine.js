@@ -1,19 +1,9 @@
-/*
- * Credit to:
- * Google IO 2011
- * Super Browser 2 Turbo HD Remix: Intro to HTML5 Game Dev
- * By: Seth Ladd
- */
-
-/*
- * ENTITIES FORMAT
- * [{"id":id, "pos":[x,y,z], "active":(0 or 1)}]
- */
-
 function GameEngine() {
     this.entities = [];
     this.bullets = [];
     this.timer = new Timer();
+
+    this.entities_updates = [];
 }
 
 GameEngine.prototype.init = function() {
@@ -22,12 +12,12 @@ GameEngine.prototype.init = function() {
     WORLD.renderer.clear();
     WORLD.renderer.shadowMapEnabled = true;
     WORLD.renderer.shadowMapSoft = true;
-    WORLD.renderer.setClearColorHex(0xEEEEEE, 1.0);
+    WORLD.renderer.setClearColor(0xEEEEEE, 1.0);
     document.body.appendChild(WORLD.renderer.domElement);
+    $("canvas").attr("id", "pointerLock");
 }
 
 GameEngine.prototype.start = function() {
-    this.lasteUpdate = Date.now();
     var that = this;
     (function animate() {
         that.clockTick = that.timer.tick();
@@ -49,6 +39,15 @@ GameEngine.prototype.update = function() {
     }
     */
 
+    this.updateMyself();
+    this.updatePlayers();
+    this.updateBullets();
+    this.checkCollisions();
+
+    WORLD.stats.update();
+}
+
+GameEngine.prototype.updateMyself = function() {
     if (keys[KEY.FORWARD]) {
         WORLD.player.mesh.translateZ(-MOVE_VELOCITY);
     }
@@ -65,6 +64,7 @@ GameEngine.prototype.update = function() {
         WORLD.player.mesh.translateX(MOVE_VELOCITY);
     }
 
+    /*
     if (keys[KEY.JUMP]) {
         velocity = JUMP_VELOCITY;
     }
@@ -77,15 +77,18 @@ GameEngine.prototype.update = function() {
         WORLD.player.mesh.position.y = 0;
         velocity = 0;
     }
+    */
+
     if (move_x) {
         WORLD.player.mesh.rotation.y -= move_x*0.01;
         move_x = 0;
     }
+}
 
-    this.updateBullets();
-    this.checkCollisions();
-
-    WORLD.stats.update();
+GameEngine.prototype.updatePlayers = function() {
+    $.each(this.entities_updates, function(idx, val) {
+        console.log("# VAL ID: " + val.id);
+    });
 }
 
 GameEngine.prototype.updateBullets = function() {
@@ -103,11 +106,8 @@ GameEngine.prototype.checkCollisions = function() {
     var diff = new THREE.Vector3();
     for (var p in this.entities) {
         for (var b in this.bullets) {
-            //r57
-            //diff.subVectors(this.entities[p].mesh.position,
-                            //this.bullets[b].mesh.position);
-            diff.sub(this.entities[p].mesh.position,
-                     this.bullets[b].mesh.position);
+            diff.subVectors(this.entities[p].mesh.position, this.bullets[b].mesh.position); // r58
+            //diff.sub(this.entities[p].mesh.position, this.bullets[b].mesh.position); // r54
             if (this.entities[p] !== WORLD.player &&
                 diff.length() < PLAYER_RADIUS + BULLET_RADIUS) {
                 // for now, set hit to red

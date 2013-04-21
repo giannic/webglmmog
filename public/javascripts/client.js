@@ -13,11 +13,11 @@ function init_world() {
 
     init_environment();
 
-    init_light();
-
     //init_landscape();
 
     init_player();
+
+    init_light();
 
     // bullets config
     WORLD.bullet_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
@@ -38,8 +38,11 @@ function init_landscape() {
 }
 
 function init_environment() {
-    var format = ".jpg";
-    var urls = [
+    var cubemap, env, shader, materal,
+        urls, format;
+
+    format = ".jpg";
+    urls = [
         IMG_PATH + 'skybox_xpos' + format,
         IMG_PATH + 'skybox_xneg' + format,
         IMG_PATH + 'skybox_ypos' + format,
@@ -48,14 +51,14 @@ function init_environment() {
         IMG_PATH + 'skybox_zneg' + format
     ];
 
-    var cubemap = THREE.ImageUtils.loadTextureCube(urls);
+    cubemap = THREE.ImageUtils.loadTextureCube(urls);
     cubemap.format = THREE.RGBFormat;
 
-    //var shader = THREE.ShaderLib["cube"];
-    var shader = THREE.ShaderUtils.lib["cube"];
+    shader = THREE.ShaderLib["cube"];
+    //shader = THREE.ShaderUtils.lib["cube"]; // r54
     shader.uniforms["tCube"].value = cubemap;
 
-    var material = new THREE.ShaderMaterial({
+    material = new THREE.ShaderMaterial({
         fragmentShader: shader.fragmentShader,
         vertexShader: shader.vertexShader,
         uniforms: shader.uniforms,
@@ -63,9 +66,9 @@ function init_environment() {
         side: THREE.BackSide
     });
 
-    var env = new THREE.Mesh(new THREE.CubeGeometry(
-                                     ENV_SIZE, ENV_SIZE, ENV_SIZE),
-                             material)
+    env = new THREE.Mesh(
+          new THREE.CubeGeometry(ENV_SIZE, ENV_SIZE, ENV_SIZE),
+              material);
 
     WORLD.scene.add(env);
 }
@@ -93,38 +96,26 @@ function init_client() {
     WORLD.camera.useQuaternion = true;
     WORLD.camera.position.z = 500;
     WORLD.camera.position.y = 100;
+
+    socket.emit("client_complete"); // may not be the best place to put this
 }
 
 function init_player() {
-    /*
-    WORLD.player_geometry = new THREE.SphereGeometry(PLAYER_RADIUS, PLAYER_SEG_X, PLAYER_SEG_Y);
-    */
     WORLD.player_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
     WORLD.player_material_hit = new THREE.MeshLambertMaterial({color: 0xFF0000});
 
     var loader;
 
     loader = new THREE.BinaryLoader(true);
-    //document.body.appendChild(loader.statusDomElement);
     loader.load(OBJ_PATH + "Feisar_Ship01.js", function(object) {
         WORLD.player_geometry = object;
-        //loader.statusDomElement.style.display = "none";
+        ASSERT.geometry_loaded = 1;
+        console.log("harrow loading geometry"); // OMGZOR GEOMETRY NOT LOADED
     });
-
-    // used with OBJMTLoader
-    /*
-    loader = new THREE.OBJMTLLoader();
-    loader.addEventListener('load', function(event) {
-        var object = event.content;
-        object.position.y = 10;
-        WORLD.player_geometry = object;
-    });
-    loader.load(OBJ_PATH + "Feisar_Ship01.obj",
-                OBJ_PATH + "Feisar_Ship01.mtl");
-    */
 }
 
 // currently not in use
+/*
 function detect_collisions() {
     var origin,
         local_vertex, global_vertex,
@@ -136,7 +127,12 @@ function detect_collisions() {
     for (i = 0; i < WORLD.player_mesh.geometry.vertices.length; i++) {
         local_vertex = WORLD.player_mesh.vertices[i].clone();
         global_vertex = local_vertex.applyMatrix4(WORLD.player_mesh.matrix);
-        direction = global_vertex.sub(WORLD.player_mesh.position);
+
+        // r54
+        //direction = global_vertex.sub(WORLD.player_mesh.position);
+
+        // r58
+        direction.subVectors(global_vertex, WORLD.player_mesh.position);
 
         ray = new THREE.Raycaster(origin, direction.clone().normalize());
         results = ray.intersectObjects(game.entities);
@@ -144,20 +140,37 @@ function detect_collisions() {
         }
     }
 }
+*/
+
+/*
+ * Gets the direction of the vector from the camera to the player
+ * Output: THREE.Vector3 In World Coordinates
+ */
+function get_my_direction() {
+    var v, dir;
+
+    v = new THREE.Vector3(0,0,-1);
+    //v = WORLD.camera.matrixWorld.multiplyVector3(v); // r54
+    v.applyMatrix4(WORLD.camera.matrixWorld); // r58
+
+    //dir.sub(v).setLength(BULLET_VELOCITY); // r58
+    dir = new THREE.Vector3(0,0,0);
+    dir.copy(WORLD.player.mesh.position);
+
+    //dir.subSelf(v); // r54
+    dir.subVectors(dir, v); // r58
+    //dir.sub(v);
+
+    return dir;
+}
 
 /*
  * Launch a bullet from this player
  */
 function emit_attack() {
-    var v = new THREE.Vector3(0,0,-1);
-    // r57
-    //v = v.applyMatrix4(WORLD.camera.matrixWorld);
-    v = WORLD.camera.matrixWorld.multiplyVector3(v);
-    var dir = new THREE.Vector3(0,0,0);
-    dir.copy(WORLD.player.mesh.position);
-    //r57
-    //dir.sub(v).setLength(BULLET_VELOCITY);
-    dir.subSelf(v).setLength(BULLET_VELOCITY);
+    var dir;
+    dir = get_my_direction();
+    dir.setLength(BULLET_VELOCITY);
 
     game.bullets.push(new Bullet(game,
                                  dir,
@@ -168,3 +181,4 @@ function emit_attack() {
     game.bullets[game.bullets.length-1].mesh.position.copy(WORLD.player.mesh.position);
     WORLD.scene.add(game.bullets[game.bullets.length-1].mesh);
 }
+

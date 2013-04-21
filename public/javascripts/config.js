@@ -1,3 +1,5 @@
+var socket;
+
 // PATHS
 var OBJ_PATH = "../obj/",
     IMG_PATH = "../images/";
@@ -24,7 +26,6 @@ var PLAYER_RADIUS = 20,
     BULLET_SEG_X = 5,
     BULLET_SEG_Y = 5,
 
-    velocity = 0,
     JUMP_VELOCITY = 50,
     MOVE_VELOCITY = 15,
     GRAVITY = 6,
@@ -50,3 +51,8 @@ keys[KEY.ATTACK] = false;
 
 // MOUSE MOVE
 var move_x, move_y;
+
+// FAIL SAFES
+var ASSERT = {
+    geometry_loaded:0
+}

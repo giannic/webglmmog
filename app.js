@@ -2,11 +2,14 @@
  * Global Constants
  */
 
-var current_id = 0;
+var current_id = 0; //  last assigned id
 var entities = [];
 var bullets = [];
+var PLAYER_STRUCT = {"id": 0,
+                     "pos":{"x": 0, "y": 0, "z": 0},
+                     "dir":{"x": 0, "y": 0, "z": 0}};
 
-/**
+/*
  * Module dependencies.
  */
 
@@ -21,6 +24,7 @@ var routes = require('./routes')
   , user = require('./routes/user')
   , path = require('path')
   , fs = require('fs');
+  //, three = require('three');
 
 server.listen(3000);
 
@@ -45,22 +49,41 @@ app.get('/users', user.list);
 
 // original sockets code
 io.sockets.on('connection', function (socket) {
-    current_id = entities.length;
-    entities.push([0, 0]);
-    socket.emit('assignID', current_id);
-    socket.emit('setupPlayers', entities);
-    socket.emit('setupComplete'); // used to ensure mesh arent null
-    socket.broadcast.emit('addPlayer', current_id);
+    // set up just connected player
+    socket.on('client_complete', function() {
+        current_id = entities.length;
+        entities.push(PLAYER_STRUCT);
+        entities[entities.length-1].id = current_id;
 
-    // data: {"id":id, "pos":[x,y,z]}
-    socket.on('keypress', function (data) {
-        //var player = entities[data[0]];
-        var player = entities[data.id];
+        socket.emit('assignID', current_id);
 
-        player[0] = data.pos[0];
-        player[1] = data.pos[1];
-        player[2] = data.pos[2];
-
-        socket.broadcast.emit('updatePlayer', data);
+        // need to poll all current locations of players
+        socket.emit('setupPlayers', entities);
+        socket.broadcast.emit('addPlayer', current_id);
+        socket.emit('setupComplete'); // used to ensure mesh arent null
     });
+
+    // data: {"id":id, "dir":[x,y,z]}
+    socket.on('keydown', function (player_data) {
+        var player = entities[player_data.id];
+
+        player.pos.x = player_data.pos.x;
+        player.pos.y = player_data.pos.y;
+        player.pos.z = player_data.pos.z;
+
+        /*
+        player.dir[0] = player_data.dir[0];
+        player.dir[1] = player_data.dir[1];
+        player.dir[2] = player_data.dir[2];
+        */
+
+        console.log(player_data);
+
+        socket.broadcast.emit('updatePlayer', player_data);
+    });
+
+    socket.on('keydown', function (player_data) {
+
+    });
+
 });

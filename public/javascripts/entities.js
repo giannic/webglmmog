@@ -25,9 +25,10 @@ Entity.prototype.draw = function() {
  * Player
  */
 function Player() {}
-function Player(game, id, mesh, active) {
+function Player(game, id, mesh, velocity, active) {
     Entity.call(this, game, mesh);
     this.id = id;
+    this.velocity = velocity;
     this.active = active;
 }
 
