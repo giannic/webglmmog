@@ -1,4 +1,4 @@
 webglmmog
 =========
 
-Currently using: THREE.js r54
+Currently using: THREE.js r58
