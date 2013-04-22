@@ -24,9 +24,11 @@ var routes = require('./routes')
   , user = require('./routes/user')
   , path = require('path')
   , fs = require('fs')
-  , three = require('three');
+  , THREE = require('three');
 
-var TYPE = require('./entities.js');
+var TYPE = require('./entities.js')
+  , CONFIG = require('./config.js');
+  //, WORLD = require('./world.js'); // TODO
 
 server.listen(3000);
 
@@ -58,14 +60,11 @@ app.get('/users', user.list);
 io.sockets.on('connection', function (client) {
     // set up just connected player
     client.on('client_complete', function() {
-        current_id = entities.length;
-        entities.push(PLAYER_STRUCT);
-        entities[entities.length-1].id = current_id;
+        new_player();
 
-        client.emit('assignID', current_id);
+        setup_players();
 
         // need to poll all current locations of players
-        client.emit('setupPlayers', entities);
         client.broadcast.emit('addPlayer', current_id);
         client.emit('setupComplete'); // used to ensure mesh arent null
     });
@@ -90,4 +89,33 @@ io.sockets.on('connection', function (client) {
     client.on('mousemove', function (data) {
         client.broadcast.emit('updatePlayerRotation', data);
     });
+
+
+    /*
+     * Helper functions to sync server and client
+     */
+
+    function new_player() {
+        current_id = entities.length;
+        /*
+        var test = new TYPE.Player(0, // game
+                                   current_id,
+                                   new THREE.Mesh(0, 0),
+                                   new THREE.Vector3(0, 0, 0),
+                                   0,
+                                   true);
+        */
+        //console.log(test.mesh);
+
+
+        entities.push(PLAYER_STRUCT);
+        entities[entities.length-1].id = current_id;
+        client.emit('assignID', current_id);
+    }
+
+    function setup_players() {
+        client.emit('setupPlayers', entities);
+        var p = new TYPE.Player(0,2);
+        console.log(p.id);
+    }
 });

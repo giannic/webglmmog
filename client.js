@@ -24,7 +24,9 @@ function init_world() {
 
     // bullets config
     WORLD.bullet_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
-    WORLD.bullet_geometry = new THREE.SphereGeometry(BULLET_RADIUS, BULLET_SEG_X, BULLET_SEG_Y);
+    WORLD.bullet_geometry = new THREE.SphereGeometry(CONFIG.BULLET_RADIUS,
+                                                     CONFIG.BULLET_SEG_X,
+                                                     CONFIG.BULLET_SEG_Y);
 
 }
 
@@ -46,12 +48,12 @@ function init_environment() {
 
     format = ".jpg";
     urls = [
-        IMG_PATH + 'skybox_xpos' + format,
-        IMG_PATH + 'skybox_xneg' + format,
-        IMG_PATH + 'skybox_ypos' + format,
-        IMG_PATH + 'skybox_yneg' + format,
-        IMG_PATH + 'skybox_zpos' + format,
-        IMG_PATH + 'skybox_zneg' + format
+        CONFIG.IMG_PATH + 'skybox_xpos' + format,
+        CONFIG.IMG_PATH + 'skybox_xneg' + format,
+        CONFIG.IMG_PATH + 'skybox_ypos' + format,
+        CONFIG.IMG_PATH + 'skybox_yneg' + format,
+        CONFIG.IMG_PATH + 'skybox_zpos' + format,
+        CONFIG.IMG_PATH + 'skybox_zneg' + format
     ];
 
     cubemap = THREE.ImageUtils.loadTextureCube(urls);
@@ -70,7 +72,9 @@ function init_environment() {
     });
 
     env = new THREE.Mesh(
-          new THREE.CubeGeometry(ENV_SIZE, ENV_SIZE, ENV_SIZE),
+          new THREE.CubeGeometry(CONFIG.ENV_SIZE,
+                                 CONFIG.ENV_SIZE,
+                                 CONFIG.ENV_SIZE),
               material);
 
     WORLD.scene.add(env);
@@ -95,7 +99,7 @@ function init_client() {
     element.requestPointerLock();
     */
 
-    WORLD.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, ENV_SIZE);
+    WORLD.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, CONFIG.ENV_SIZE);
     WORLD.camera.useQuaternion = true;
     WORLD.camera.position.z = 500;
     WORLD.camera.position.y = 100;
@@ -110,7 +114,7 @@ function init_player() {
     var loader;
 
     loader = new THREE.BinaryLoader(true);
-    loader.load(OBJ_PATH + "Feisar_Ship01.js", function(object) {
+    loader.load(CONFIG.OBJ_PATH + "Feisar_Ship01.js", function(object) {
         WORLD.player_geometry = object;
         console.log("harrow loading geometry"); // OMGZOR GEOMETRY NOT LOADED
     });
@@ -177,7 +181,7 @@ function get_my_direction() {
 function emit_attack() {
     var dir;
     dir = get_my_direction();
-    dir.setLength(BULLET_VELOCITY);
+    dir.setLength(CONFIG.BULLET_VELOCITY);
 
     game.bullets.push(new TYPE.Bullet(game,
                                  dir,

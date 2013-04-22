@@ -54,7 +54,7 @@ exports.Bullet = function(game, velocity, mesh) {
     exports.Entity.call(this, game, mesh);
     this.velocity = velocity;
     this.mesh = mesh;
-    this.life = BULLET_LIFE;
+    this.life = CONFIG.BULLET_LIFE;
 }
 
 exports.Bullet.prototype = new exports.Entity();

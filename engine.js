@@ -58,31 +58,31 @@ GameEngine.prototype.updateMyself = function() {
     player_roll = WORLD.player.mesh.rotation.z;
 
     if (keys[KEY.FORWARD]) {
-        WORLD.player.mesh.translateZ(-PLAYER_VELOCITY);
+        WORLD.player.mesh.translateZ(-CONFIG.PLAYER_VELOCITY);
     }
 
     if (keys[KEY.BACK]) {
-        WORLD.player.mesh.translateZ(PLAYER_VELOCITY);
+        WORLD.player.mesh.translateZ(CONFIG.PLAYER_VELOCITY);
     }
 
     if (keys[KEY.LEFT]) {
-        WORLD.player.mesh.translateX(-PLAYER_VELOCITY);
-        if (player_roll < ROLL_LIMIT) {
-            WORLD.player.mesh.rotation.z += ROLL_VELOCITY; // ROLL
+        WORLD.player.mesh.translateX(-CONFIG.PLAYER_VELOCITY);
+        if (player_roll < CONFIG.ROLL_LIMIT) {
+            WORLD.player.mesh.rotation.z += CONFIG.ROLL_VELOCITY; // ROLL
         }
-    } else if (player_roll > 0 && move_x > -MOUSE_ROLL_THRESHOLD) {
+    } else if (player_roll > 0 && move_x > -CONFIG.MOUSE_ROLL_THRESHOLD) {
         // rolled, but released key
-        WORLD.player.mesh.rotation.z -= ROLL_VELOCITY; // ROLL BACK
+        WORLD.player.mesh.rotation.z -= CONFIG.ROLL_VELOCITY; // ROLL BACK
     }
 
     if (keys[KEY.RIGHT]) {
-        WORLD.player.mesh.translateX(PLAYER_VELOCITY);
-        if (player_roll > -ROLL_LIMIT) {
-            WORLD.player.mesh.rotation.z -= ROLL_VELOCITY; // ROLL
+        WORLD.player.mesh.translateX(CONFIG.PLAYER_VELOCITY);
+        if (player_roll > -CONFIG.ROLL_LIMIT) {
+            WORLD.player.mesh.rotation.z -= CONFIG.ROLL_VELOCITY; // ROLL
         }
-    } else if (player_roll < 0 && move_x < MOUSE_ROLL_THRESHOLD) {
+    } else if (player_roll < 0 && move_x < CONFIG.MOUSE_ROLL_THRESHOLD) {
         // rolled, but released key
-        WORLD.player.mesh.rotation.z += ROLL_VELOCITY; // ROLL BACK
+        WORLD.player.mesh.rotation.z += CONFIG.ROLL_VELOCITY; // ROLL BACK
     }
 
     /*
@@ -97,15 +97,15 @@ GameEngine.prototype.updateMyself = function() {
     */
 
     if (move_x) {
-        WORLD.player.mesh.rotation.y -= move_x*MOUSE_MOVE_RATIO;
+        WORLD.player.mesh.rotation.y -= move_x*CONFIG.MOUSE_MOVE_RATIO;
 
         // If mouse moves enough, plane will also roll
-        if (move_x > MOUSE_ROLL_THRESHOLD &&
-            WORLD.player.mesh.rotation.z > -ROLL_LIMIT) { // rightward
-            WORLD.player.mesh.rotation.z -= ROLL_VELOCITY;
-        } else if (move_x < -MOUSE_ROLL_THRESHOLD &&
-                   WORLD.player.mesh.rotation.z > -ROLL_LIMIT) { // leftward
-            WORLD.player.mesh.rotation.z += ROLL_VELOCITY;
+        if (move_x > CONFIG.MOUSE_ROLL_THRESHOLD &&
+            WORLD.player.mesh.rotation.z > -CONFIG.ROLL_LIMIT) { // rightward
+            WORLD.player.mesh.rotation.z -= CONFIG.ROLL_VELOCITY;
+        } else if (move_x < -CONFIG.MOUSE_ROLL_THRESHOLD &&
+                   WORLD.player.mesh.rotation.z > -CONFIG.ROLL_LIMIT) { // leftward
+            WORLD.player.mesh.rotation.z += CONFIG.ROLL_VELOCITY;
         } else {
         }
 
@@ -128,19 +128,19 @@ GameEngine.prototype.updateMyself = function() {
 GameEngine.prototype.updatePlayers = function() {
     $.each(this.entities_updates, function(idx, update) {
         if (update.keys[KEY.FORWARD]) {
-            game.entities[update.id].mesh.translateZ(-PLAYER_VELOCITY);
+            game.entities[update.id].mesh.translateZ(-CONFIG.PLAYER_VELOCITY);
         }
 
         if (update.keys[KEY.BACK]) {
-            game.entities[update.id].mesh.translateZ(PLAYER_VELOCITY);
+            game.entities[update.id].mesh.translateZ(CONFIG.PLAYER_VELOCITY);
         }
 
         if (update.keys[KEY.LEFT]) {
-            game.entities[update.id].mesh.translateX(-PLAYER_VELOCITY);
+            game.entities[update.id].mesh.translateX(-CONFIG.PLAYER_VELOCITY);
         }
 
         if (update.keys[KEY.RIGHT]) {
-            game.entities[update.id].mesh.translateX(PLAYER_VELOCITY);
+            game.entities[update.id].mesh.translateX(CONFIG.PLAYER_VELOCITY);
         }
     });
     this.entities_updates.length = 0; // clear updates for this frame
@@ -164,7 +164,7 @@ GameEngine.prototype.checkCollisions = function() {
             diff.subVectors(this.entities[p].mesh.position, this.bullets[b].mesh.position); // r58
             //diff.sub(this.entities[p].mesh.position, this.bullets[b].mesh.position); // r54
             if (this.entities[p] !== WORLD.player &&
-                diff.length() < PLAYER_RADIUS + BULLET_RADIUS) {
+                diff.length() < CONFIG.PLAYER_RADIUS + CONFIG.BULLET_RADIUS) {
                 // for now, set hit to red
                 this.entities[p].mesh.material = WORLD.player_material_hit;
             }
