@@ -13,10 +13,9 @@ $(document).ready(function() {
     // THREEX utilities init
     THREEx.WindowResize(WORLD.renderer, WORLD.camera);
 
-    // Keybindings
-    /*
-     * emitted data: {"id":id, "pos":[x,y,z]}
-     */
+    /*******************
+     * ACTION BINDINGS *
+     *******************/
     $(document)
     .keydown(function(e) {
         var k;
@@ -143,26 +142,12 @@ $(document).ready(function() {
      **************************/
     socket.on('updatePlayer', function(data) {
         //var their_id = data.id;
-
-
         game.entities_updates.push(data);
-        // TODO: THIS IS WHERE THE PROBLEM LIES
-        /*
-        game.entities[their_id].mesh.position.x = data.pos.x;
-        game.entities[their_id].mesh.position.y = data.pos.y;
-        game.entities[their_id].mesh.position.z = data.pos.z;
-        */
-
-        /*
-        game.entities[id].dir.x = data.dir[0];
-        game.entities[id].dir.y = data.dir[1];
-        game.entities[id].dir.z = data.dir[2];
-        */
     });
 
     // this should probably be pushed to entities_updates
     // instead of being updated here
     socket.on('updatePlayerRotation', function(data) {
-        game.entities[data.id].mesh.rotation.y -= data.move_x*0.01;
+        game.entities[data.id].mesh.rotation.y -= data.move_x*MOUSE_MOVE_RATIO;
     });
 });

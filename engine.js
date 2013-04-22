@@ -32,6 +32,11 @@ GameEngine.prototype.draw = function(callback) {
     WORLD.renderer.render(WORLD.scene, WORLD.camera);
 }
 
+
+/***********
+ * UPDATES *
+ ***********/
+
 GameEngine.prototype.update = function() {
     /*
     for (var p in this.entities) {
@@ -48,6 +53,10 @@ GameEngine.prototype.update = function() {
 }
 
 GameEngine.prototype.updateMyself = function() {
+    var player_roll;
+
+    player_roll = WORLD.player.mesh.rotation.z;
+
     if (keys[KEY.FORWARD]) {
         WORLD.player.mesh.translateZ(-PLAYER_VELOCITY);
     }
@@ -58,10 +67,22 @@ GameEngine.prototype.updateMyself = function() {
 
     if (keys[KEY.LEFT]) {
         WORLD.player.mesh.translateX(-PLAYER_VELOCITY);
+        if (player_roll < ROLL_LIMIT) {
+            WORLD.player.mesh.rotation.z += ROLL_VELOCITY; // ROLL
+        }
+    } else if (player_roll > 0 && move_x > -MOUSE_ROLL_THRESHOLD) {
+        // rolled, but released key
+        WORLD.player.mesh.rotation.z -= ROLL_VELOCITY; // ROLL BACK
     }
 
     if (keys[KEY.RIGHT]) {
         WORLD.player.mesh.translateX(PLAYER_VELOCITY);
+        if (player_roll > -ROLL_LIMIT) {
+            WORLD.player.mesh.rotation.z -= ROLL_VELOCITY; // ROLL
+        }
+    } else if (player_roll < 0 && move_x < MOUSE_ROLL_THRESHOLD) {
+        // rolled, but released key
+        WORLD.player.mesh.rotation.z += ROLL_VELOCITY; // ROLL BACK
     }
 
     /*
@@ -76,8 +97,19 @@ GameEngine.prototype.updateMyself = function() {
     */
 
     if (move_x) {
-        WORLD.player.mesh.rotation.y -= move_x*0.01;
-        move_x = 0;
+        WORLD.player.mesh.rotation.y -= move_x*MOUSE_MOVE_RATIO;
+
+        // If mouse moves enough, plane will also roll
+        if (move_x > MOUSE_ROLL_THRESHOLD &&
+            WORLD.player.mesh.rotation.z > -ROLL_LIMIT) { // rightward
+            WORLD.player.mesh.rotation.z -= ROLL_VELOCITY;
+        } else if (move_x < -MOUSE_ROLL_THRESHOLD &&
+                   WORLD.player.mesh.rotation.z > -ROLL_LIMIT) { // leftward
+            WORLD.player.mesh.rotation.z += ROLL_VELOCITY;
+        } else {
+        }
+
+        move_x = 0; // reset for next frame
     }
 
     // clear active keys on each update frame

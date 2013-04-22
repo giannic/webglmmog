@@ -21,21 +21,27 @@ var PLAYER_RADIUS = 20,
     PLAYER_SEG_Y = 8,
     PLAYER_VELOCITY = 15,
 
+    // plane rolling
+    ROLL_VELOCITY = Math.PI/360,
+    ROLL_LIMIT = Math.PI/18,
+    MOUSE_ROLL_THRESHOLD = 10,
+
     BULLET_LIFE = 100,
     BULLET_RADIUS = 5,
     BULLET_VELOCITY = 20,
-    BULLET_SEG_X = 5,
+    BULLET_SEG_X = 5, // segments in sphere
     BULLET_SEG_Y = 5,
 
     GRAVITY = 6,
     ENV_SIZE = 20000,
+    MOUSE_MOVE_RATIO = 0.01, // how much mouse moves vs how much yaw
 
     KEY = {
         LEFT: 65,
         FORWARD: 87,
         RIGHT: 68,
         BACK: 83,
-        JUMP: 32
+        JUMP: 32 // currently unused
     };
 
 

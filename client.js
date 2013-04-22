@@ -1,3 +1,6 @@
+/******************
+ * INIT FUNCTIONS *
+ ******************/
 function init_stats() {
     WORLD.stats = new Stats();
     WORLD.stats.domElement.style.position = 'absolute';
@@ -141,6 +144,11 @@ function detect_collisions() {
 }
 */
 
+
+/********************
+ * UPDATE FUNCTIONS *
+ ********************/
+
 /*
  * Gets the direction of the vector from the camera to the player
  * Output: THREE.Vector3 In World Coordinates
@@ -181,3 +189,6 @@ function emit_attack() {
     WORLD.scene.add(game.bullets[game.bullets.length-1].mesh);
 }
 
+function roll(player_mesh) {
+
+}
