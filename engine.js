@@ -152,7 +152,7 @@ GameEngine.prototype.updateBullets = function() {
         if (this.bullets[b].life > 0) {
             this.bullets[b].mesh.position.x += this.bullets[b].velocity.x;
             this.bullets[b].mesh.position.z += this.bullets[b].velocity.z;
-            //bullets[b].mesh.position.y += bullets[b].velocity.y;
+            //this.bullets[b].mesh.position.y += this.bullets[b].velocity.y;
         }
     }
 }

@@ -100,7 +100,7 @@ $(document).ready(function() {
     socket.on('setupPlayers', function(server_entities) {
         for (var p in server_entities) {
             game.entities.push(
-                new Player(game,
+                new TYPE.Player(game,
                            p,
                            new THREE.Mesh(WORLD.player_geometry,
                                           WORLD.player_material),
@@ -119,7 +119,7 @@ $(document).ready(function() {
     });
 
     socket.on('addPlayer', function(new_id) {
-        game.entities.push(new Player(game, new_id,
+        game.entities.push(new TYPE.Player(game, new_id,
                            new THREE.Mesh(WORLD.player_geometry,
                                           WORLD.player_material),
                            new THREE.Vector3(0,0,0), // direction

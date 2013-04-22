@@ -23,8 +23,10 @@ var io = require('socket.io').listen(server);
 var routes = require('./routes')
   , user = require('./routes/user')
   , path = require('path')
-  , fs = require('fs');
-  //, three = require('three');
+  , fs = require('fs')
+  , three = require('three');
+
+var TYPE = require('./entities.js');
 
 server.listen(3000);
 
@@ -37,7 +39,6 @@ app.configure(function(){
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(app.router);
-    //app.use(express.static(path.join(__dirname, 'public')));
     app.use(express.static(path.join(__dirname, '/')));
 
     //added
@@ -77,9 +78,11 @@ io.sockets.on('connection', function (client) {
         player.pos.y = player_data.pos.y;
         player.pos.z = player_data.pos.z;
 
+        /*
         player.dir.x = player_data.dir.x;
         player.dir.y = player_data.dir.y;
         player.dir.z = player_data.dir.z;
+        */
 
         client.broadcast.emit('updatePlayer', player_data);
     });

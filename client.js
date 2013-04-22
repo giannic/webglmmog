@@ -179,7 +179,7 @@ function emit_attack() {
     dir = get_my_direction();
     dir.setLength(BULLET_VELOCITY);
 
-    game.bullets.push(new Bullet(game,
+    game.bullets.push(new TYPE.Bullet(game,
                                  dir,
                                  new THREE.Mesh(WORLD.bullet_geometry,
                                                 WORLD.bullet_material))
@@ -187,6 +187,8 @@ function emit_attack() {
 
     game.bullets[game.bullets.length-1].mesh.position.copy(WORLD.player.mesh.position);
     WORLD.scene.add(game.bullets[game.bullets.length-1].mesh);
+
+    //socket.emit("new_bullet", {"dir": dir}); // tell the other plays i fired
 }
 
 function roll(player_mesh) {
