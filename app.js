@@ -26,9 +26,11 @@ var routes = require('./routes')
   , fs = require('fs')
   , THREE = require('three');
 
+// my own utilities
 var TYPE = require('./entities.js')
-  , CONFIG = require('./config.js');
-  //, WORLD = require('./world.js'); // TODO
+  , CONFIG = require('./config.js')
+  , WORLD = require('./world.js')
+  , CORE = require('./core.js');
 
 server.listen(3000);
 
@@ -56,6 +58,12 @@ app.configure('development', function(){
 
 app.get('/', routes.index);
 app.get('/users', user.list);
+
+/************************************
+ * setup on server side to be ready *
+ ************************************/
+WORLD.player_mesh = CORE.init_player_mesh(); // represented by cube here
+WORLD.player_material = CORE.init_player_material();
 
 io.sockets.on('connection', function (client) {
     // set up just connected player
@@ -97,15 +105,14 @@ io.sockets.on('connection', function (client) {
 
     function new_player() {
         current_id = entities.length;
-        /*
         var test = new TYPE.Player(0, // game
                                    current_id,
-                                   new THREE.Mesh(0, 0),
+                                   new THREE.Mesh(WORLD.player_mesh,
+                                                  WORLD.player_material),
                                    new THREE.Vector3(0, 0, 0),
                                    0,
                                    true);
-        */
-        //console.log(test.mesh);
+        console.log(test.mesh);
 
 
         entities.push(PLAYER_STRUCT);

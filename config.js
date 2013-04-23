@@ -2,11 +2,11 @@ var socket;
 
 // KEY PRESSES
 KEY = {
-    LEFT: 65,
-    FORWARD: 87,
-    RIGHT: 68,
-    BACK: 83,
-    JUMP: 32 // currently unused
+    FORWARD: 87, // w
+    LEFT: 65, // a
+    BACK: 83, // s
+    RIGHT: 68, // d
+    LIFT: 32 // spacebar
 };
 
 var keys = {};
@@ -14,7 +14,7 @@ keys[KEY.FORWARD] = false;
 keys[KEY.BACK] = false;
 keys[KEY.LEFT] = false;
 keys[KEY.RIGHT] = false;
-keys[KEY.JUMP] = false;
+keys[KEY.LIFT] = false;
 keys[KEY.ATTACK] = false;
 
 // MOUSE MOVE
