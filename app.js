@@ -20,6 +20,8 @@ var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
+io.set('log level', 1);
+
 var routes = require('./routes')
   , user = require('./routes/user')
   , path = require('path')
@@ -64,6 +66,8 @@ app.get('/users', user.list);
  ************************************/
 WORLD.player_mesh = CORE.init_player_mesh(); // represented by cube here
 WORLD.player_material = CORE.init_player_material();
+
+
 
 io.sockets.on('connection', function (client) {
     // set up just connected player
@@ -112,8 +116,6 @@ io.sockets.on('connection', function (client) {
                                    new THREE.Vector3(0, 0, 0),
                                    0,
                                    true);
-        console.log(test.mesh);
-
 
         entities.push(PLAYER_STRUCT);
         entities[entities.length-1].id = current_id;
