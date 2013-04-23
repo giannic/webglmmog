@@ -85,17 +85,29 @@ GameEngine.prototype.updateMyself = function() {
         WORLD.player.mesh.rotation.z += CONFIG.ROLL_VELOCITY; // ROLL BACK
     }
 
-    /*
-    WORLD.player.mesh.position.y += velocity;
+    //if (keys[KEY.LIFT] && player_pitch < CONFIG.PITCH_LIMIT) {
+    if (keys[KEY.LIFT]) {
+        WORLD.player.mesh.translateY(CONFIG.PLAYER_LIFT_VELOCITY);
 
-    if (WORLD.player.mesh.position.y > 0) {
-        velocity -= GRAVITY;
-    } else if (WORLD.player.mesh.position.y <= 0) {
-        WORLD.player.mesh.position.y = 0;
-        velocity = 0;
+        //var rotm = new THREE.Matrix4();
+        /*
+        WORLD.player.mesh.matrix.multiply(rotm);
+        WORLD.player.mesh.rotation.setEulerFromRotationMatrix(WORLD.player.mesh.matrix, WORLD.player.mesh.order);
+        console.log("lifting");
+        */
+
+        //WORLD.player.mesh.rotateX(CONFIG.PITCH_VELOCITY);
+        //WORLD.player.mesh.rotation.x += CONFIG.PITCH_VELOCITY; // ROLL BACK
+    } /*else if (player_pitch > 0) {
+        var rotm = new THREE.Matrix4();
+        rotm.makeRotationX(CONFIG.PITCH_VELOCITY);
+        WORLD.player.mesh.matrix.multiply(rotm);
+        WORLD.player.mesh.rotation.setEulerFromRotationMatrix(WORLD.player.mesh.matrix, WORLD.player.mesh.order);
+        //WORLD.player.mesh.rotation.x -= CONFIG.PITCH_VELOCITY; // ROLL BACK
     }
     */
 
+    // YAW by MOUSE
     if (move_x) {
         WORLD.player.mesh.rotation.y -= move_x*CONFIG.MOUSE_MOVE_RATIO;
 
