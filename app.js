@@ -132,8 +132,6 @@ io.sockets.on('connection', function (client) {
 
     function setup_players() {
         client.emit('setupPlayers', entities);
-        var p = new TYPE.Player(0,2);
-        console.log(p.id);
     }
 
     // no rolling for now
