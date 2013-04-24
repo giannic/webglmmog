@@ -193,5 +193,5 @@ function emit_attack() {
     WORLD.scene.add(game.bullets[game.bullets.length-1].mesh);
 
     // tell the other plays i fired
-    //socket.emit("new_bullet", {"pos": pos, "dir": dir});
+    socket.emit("new_bullet", {"pos": game.bullets[game.bullets.length-1].mesh.position, "dir": dir});
 }

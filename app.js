@@ -101,7 +101,6 @@ io.sockets.on('connection', function (client) {
     });
 
     client.on('new_bullet', function(bullet_data) {
-
         client.broadcast.emit('new_bullet', bullet_data);
     });
 
