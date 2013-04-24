@@ -112,6 +112,7 @@ $(document).ready(function() {
             //game.entities[p].mesh.position.z = server_entities[p].pos.z;
             game.entities[p].mesh.position.x = server_entities[p].mesh.position.x;
             game.entities[p].mesh.position.z = server_entities[p].mesh.position.z;
+            game.entities[p].mesh.rotation.y = server_entities[p].mesh.rotation.y;
             game.entities[p].mesh.castShadow = true;
             game.entities[p].mesh.receiveShadow = true;
             WORLD.scene.add(game.entities[p].mesh);

@@ -196,7 +196,6 @@ GameEngine.prototype.updatePlayers = function() {
         }
 
         // player YAW
-        console.log(update.move_x);
         if (update.move_x) {
             game.entities[update.id].mesh.rotation.y -= update.move_x*CONFIG.MOUSE_MOVE_RATIO;
 

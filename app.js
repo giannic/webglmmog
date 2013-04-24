@@ -122,6 +122,8 @@ io.sockets.on('connection', function (client) {
 
     // no rolling for now
     function update_player(player, data) {
+        if (player === 'undefined' || data === 'undefined') return;
+
         var player_roll;
 
         player_roll = player.mesh.rotation.z;
@@ -174,7 +176,6 @@ io.sockets.on('connection', function (client) {
             /*
             WORLD.player.mesh.matrix.multiply(rotm);
             WORLD.player.mesh.rotation.setEulerFromRotationMatrix(WORLD.player.mesh.matrix, WORLD.player.mesh.order);
-            console.log("lifting");
             */
 
             //WORLD.player.mesh.rotateX(CONFIG.PITCH_VELOCITY);
@@ -182,5 +183,20 @@ io.sockets.on('connection', function (client) {
         } /*else if (player_pitch > 0) {
         }
         */
+
+        if (data.move_x) {
+            player.mesh.rotation.y -= data.move_x*CONFIG.MOUSE_MOVE_RATIO;
+
+            // If mouse moves enough, plane will also roll
+            if (data.move_x > CONFIG.MOUSE_ROLL_THRESHOLD &&
+                player.mesh.rotation.z > -CONFIG.ROLL_LIMIT) { // right
+                player.mesh.rotation.z -= CONFIG.ROLL_VELOCITY;
+            } else if (data.move_x < -CONFIG.MOUSE_ROLL_THRESHOLD &&
+                       player.mesh.rotation.z > -CONFIG.ROLL_LIMIT) { // left
+                player.mesh.rotation.z += CONFIG.ROLL_VELOCITY;
+            } else {
+            }
+            //move_x = 0; // reset for next frame
+        }
     }
 });
