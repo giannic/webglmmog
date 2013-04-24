@@ -32,7 +32,7 @@ $(document).ready(function() {
             pos = {"x": WORLD.player.mesh.position.x,
                    "y": WORLD.player.mesh.position.y,
                    "z": WORLD.player.mesh.position.z};
-            socket.emit('keydown', {"id": id, "pos": pos, "dir": dir, "keys": keys});
+            socket.emit('keydown', {"id": id, "pos": pos, "dir": dir, "keys": keys, "move_x": move_x});
         //}
     })
     .keyup(function(e) {
@@ -108,8 +108,10 @@ $(document).ready(function() {
                            0, // velocity
                            true));
 
-            game.entities[p].mesh.position.x = server_entities[p].pos.x;
-            game.entities[p].mesh.position.z = server_entities[p].pos.z;
+            //game.entities[p].mesh.position.x = server_entities[p].pos.x;
+            //game.entities[p].mesh.position.z = server_entities[p].pos.z;
+            game.entities[p].mesh.position.x = server_entities[p].mesh.position.x;
+            game.entities[p].mesh.position.z = server_entities[p].mesh.position.z;
             game.entities[p].mesh.castShadow = true;
             game.entities[p].mesh.receiveShadow = true;
             WORLD.scene.add(game.entities[p].mesh);
@@ -148,6 +150,6 @@ $(document).ready(function() {
     // this should probably be pushed to entities_updates
     // instead of being updated here
     socket.on('updatePlayerRotation', function(data) {
-        game.entities[data.id].mesh.rotation.y -= data.move_x*MOUSE_MOVE_RATIO;
+        game.entities[data.id].mesh.rotation.y -= data.move_x * CONFIG.MOUSE_MOVE_RATIO;
     });
 });

@@ -66,7 +66,11 @@ GameEngine.prototype.updateMyself = function() {
     }
 
     if (keys[KEY.LEFT]) {
+        WORLD.player.mesh.rotation.z = 0; // reset rotation  for translations
+
         WORLD.player.mesh.translateX(-CONFIG.PLAYER_VELOCITY);
+
+        WORLD.player.mesh.rotation.z = player_roll; // set rotation again
         if (player_roll < CONFIG.ROLL_LIMIT) {
             WORLD.player.mesh.rotation.z += CONFIG.ROLL_VELOCITY; // ROLL
         }
@@ -76,7 +80,11 @@ GameEngine.prototype.updateMyself = function() {
     }
 
     if (keys[KEY.RIGHT]) {
+        WORLD.player.mesh.rotation.z = 0; // reset rotation  for translations
+
         WORLD.player.mesh.translateX(CONFIG.PLAYER_VELOCITY);
+
+        WORLD.player.mesh.rotation.z = player_roll; // set rotation again
         if (player_roll > -CONFIG.ROLL_LIMIT) {
             WORLD.player.mesh.rotation.z -= CONFIG.ROLL_VELOCITY; // ROLL
         }
@@ -138,7 +146,12 @@ GameEngine.prototype.updateMyself = function() {
  * Maybe should merge, and take in the player to update instead
  */
 GameEngine.prototype.updatePlayers = function() {
+    var player_roll, current_player;
     $.each(this.entities_updates, function(idx, update) {
+        current_player = game.entities[update.id];
+        current_mesh = current_player.mesh
+        player_roll = current_mesh.rotation.z;
+
         if (update.keys[KEY.FORWARD]) {
             game.entities[update.id].mesh.translateZ(-CONFIG.PLAYER_VELOCITY);
         }
@@ -148,11 +161,31 @@ GameEngine.prototype.updatePlayers = function() {
         }
 
         if (update.keys[KEY.LEFT]) {
+            game.entities[update.id].mesh.rotation.z = 0;
+
             game.entities[update.id].mesh.translateX(-CONFIG.PLAYER_VELOCITY);
+
+            game.entities[update.id].mesh.rotation.z = player_roll;
+            if (player_roll < CONFIG.ROLL_LIMIT) {
+                game.entities[update.id].mesh.rotation.z += CONFIG.ROLL_VELOCITY; // ROLL
+            }
+        } else if (player_roll > 0 && current_player.move_x > -CONFIG.MOUSE_ROLL_THRESHOLD) {
+            // rolled, but released key
+            game.entities[update.id].mesh.rotation.z -= CONFIG.ROLL_VELOCITY; // ROLL BACK
         }
 
         if (update.keys[KEY.RIGHT]) {
+            game.entities[update.id].mesh.rotation.z = 0;
+
             game.entities[update.id].mesh.translateX(CONFIG.PLAYER_VELOCITY);
+
+            game.entities[update.id].mesh.rotation.z = player_roll;
+            if (player_roll > -CONFIG.ROLL_LIMIT) {
+                game.entities[update.id].mesh.rotation.z -= CONFIG.ROLL_VELOCITY; // ROLL
+            } else if (player_roll < 0 && current_player.move_x < CONFIG.MOUSE_ROLL_THRESHOLD) {
+                // rolled, but released key
+                game.entities[update.id].mesh.rotation.z += CONFIG.ROLL_VELOCITY; // ROLL BACK
+            }
         }
     });
     this.entities_updates.length = 0; // clear updates for this frame

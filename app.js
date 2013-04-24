@@ -85,17 +85,24 @@ io.sockets.on('connection', function (client) {
     client.on('keydown', function (player_data) {
         var player = entities[player_data.id];
 
+        update_player(player, player_data);
+
+        /*
         player.pos.x = player_data.pos.x;
         player.pos.y = player_data.pos.y;
         player.pos.z = player_data.pos.z;
 
-        /*
-        player.dir.x = player_data.dir.x;
-        player.dir.y = player_data.dir.y;
-        player.dir.z = player_data.dir.z;
+        player.mesh.position.x = player_data.mesh.position.x;
+        player.mesh.position.y = player_data.mesh.position.y;
+        player.mesh.position.z = player_data.mesh.position.z;
         */
 
         client.broadcast.emit('updatePlayer', player_data);
+    });
+
+    client.on('new_bullet', function(bullet_data) {
+
+        client.broadcast.emit('new_bullet', bullet_data);
     });
 
     client.on('mousemove', function (data) {
@@ -117,7 +124,9 @@ io.sockets.on('connection', function (client) {
                                    0,
                                    true);
 
-        entities.push(PLAYER_STRUCT);
+        entities.push(test);
+        //entities.push(PLAYER_STRUCT);
+
         entities[entities.length-1].id = current_id;
         client.emit('assignID', current_id);
     }
@@ -126,5 +135,69 @@ io.sockets.on('connection', function (client) {
         client.emit('setupPlayers', entities);
         var p = new TYPE.Player(0,2);
         console.log(p.id);
+    }
+
+    // no rolling for now
+    function update_player(player, data) {
+        var player_roll;
+
+        player_roll = player.mesh.rotation.z;
+
+        if (data.keys[KEY.FORWARD]) {
+            player.mesh.translateZ(-CONFIG.PLAYER_VELOCITY);
+        }
+
+        if (data.keys[KEY.BACK]) {
+            player.mesh.translateZ(CONFIG.PLAYER_VELOCITY);
+        }
+
+        if (data.keys[KEY.LEFT]) {
+            //player.mesh.rotation.z = 0;
+
+            player.mesh.translateX(-CONFIG.PLAYER_VELOCITY);
+
+            /*
+            player.mesh.rotation.z = player_roll;
+            if (player_roll < CONFIG.ROLL_LIMIT) {
+                player.mesh.rotation.z += CONFIG.ROLL_VELOCITY; // ROLL
+            }
+            */
+        }/* else if (player_roll > 0) {
+            // rolled, but released key
+            //player.mesh.rotation.z -= CONFIG.ROLL_VELOCITY; // ROLL BACK
+        }*/
+
+        if (data.keys[KEY.RIGHT]) {
+            //player.mesh.rotation.z = 0;
+
+            player.mesh.translateX(CONFIG.PLAYER_VELOCITY);
+
+            /*
+            player.mesh.rotation.z = player_roll;
+            if (player_roll > -CONFIG.ROLL_LIMIT) {
+                player.mesh.rotation.z -= CONFIG.ROLL_VELOCITY; // ROLL
+            }
+            */
+        }/* else if (player_roll < 0) {
+            // rolled, but released key
+            //player.mesh.rotation.z += CONFIG.ROLL_VELOCITY; // ROLL BACK
+        }*/
+
+        //if (keys[KEY.LIFT] && player_pitch < CONFIG.PITCH_LIMIT) {
+        if (data.keys[KEY.LIFT]) {
+            player.mesh.translateY(CONFIG.PLAYER_LIFT_VELOCITY);
+
+            //var rotm = new THREE.Matrix4();
+            /*
+            WORLD.player.mesh.matrix.multiply(rotm);
+            WORLD.player.mesh.rotation.setEulerFromRotationMatrix(WORLD.player.mesh.matrix, WORLD.player.mesh.order);
+            console.log("lifting");
+            */
+
+            //WORLD.player.mesh.rotateX(CONFIG.PITCH_VELOCITY);
+            //WORLD.player.mesh.rotation.x += CONFIG.PITCH_VELOCITY; // ROLL BACK
+        } /*else if (player_pitch > 0) {
+        }
+        */
     }
 });
