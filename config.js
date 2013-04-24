@@ -1,4 +1,5 @@
 var socket;
+var id;
 
 // KEY PRESSES
 KEY = {

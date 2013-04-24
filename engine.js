@@ -44,6 +44,13 @@ GameEngine.prototype.update = function() {
     }
     */
 
+    // emit to other players first
+    dir = get_my_direction(); // returns Vector3
+    pos = {"x": WORLD.player.mesh.position.x,
+           "y": WORLD.player.mesh.position.y,
+           "z": WORLD.player.mesh.position.z};
+    socket.emit('keydown', {"id": id, "pos": pos, "dir": dir, "keys": keys, "move_x": move_x});
+
     this.updateMyself();
     this.updatePlayers();
     this.updateBullets();

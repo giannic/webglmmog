@@ -1,7 +1,7 @@
 $(document).ready(function() {
     socket = io.connect();
 
-    var id;
+    //var id;
     var entry_coordinates = {x:-1, y:-1};
 
     game = new Game();
@@ -22,18 +22,18 @@ $(document).ready(function() {
         e.preventDefault();
 
         k = (e.keyCode ? e.keyCode : e.which);
-        //if (keys[k] !== true) {
-            var dir;
-            keys[k] = true;
 
-            // id: player_id
-            // dir: direction player is facing
-            dir = get_my_direction(); // returns Vector3
-            pos = {"x": WORLD.player.mesh.position.x,
-                   "y": WORLD.player.mesh.position.y,
-                   "z": WORLD.player.mesh.position.z};
-            socket.emit('keydown', {"id": id, "pos": pos, "dir": dir, "keys": keys, "move_x": move_x});
-        //}
+        var dir;
+        keys[k] = true;
+
+        // id: player_id
+        // dir: direction player is facing
+        //dir = get_my_direction(); // returns Vector3
+        //pos = {"x": WORLD.player.mesh.position.x,
+               //"y": WORLD.player.mesh.position.y,
+               //"z": WORLD.player.mesh.position.z};
+        //socket.emit('keydown', {"id": id, "pos": pos, "dir": dir, "keys": keys, "move_x": move_x});
+
     })
     .keyup(function(e) {
         var k;
