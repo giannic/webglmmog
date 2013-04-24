@@ -84,19 +84,7 @@ io.sockets.on('connection', function (client) {
     // data: {"id":id, "dir":[x,y,z]}
     client.on('keydown', function (player_data) {
         var player = entities[player_data.id];
-
         update_player(player, player_data);
-
-        /*
-        player.pos.x = player_data.pos.x;
-        player.pos.y = player_data.pos.y;
-        player.pos.z = player_data.pos.z;
-
-        player.mesh.position.x = player_data.mesh.position.x;
-        player.mesh.position.y = player_data.mesh.position.y;
-        player.mesh.position.z = player_data.mesh.position.z;
-        */
-
         client.broadcast.emit('updatePlayer', player_data);
     });
 
@@ -104,18 +92,17 @@ io.sockets.on('connection', function (client) {
         client.broadcast.emit('new_bullet', bullet_data);
     });
 
-    client.on('mousemove', function (data) {
-        client.broadcast.emit('updatePlayerRotation', data);
-    });
+    //client.on('mousemove', function (data) {
+        //client.broadcast.emit('updatePlayerRotation', data);
+    //});
 
 
     /*
      * Helper functions to sync server and client
      */
-
     function new_player() {
         current_id = entities.length;
-        var test = new TYPE.Player(0, // game
+        var player_to_add = new TYPE.Player(0, // game, server doesn't need
                                    current_id,
                                    new THREE.Mesh(WORLD.player_mesh,
                                                   WORLD.player_material),
@@ -123,8 +110,7 @@ io.sockets.on('connection', function (client) {
                                    0,
                                    true);
 
-        entities.push(test);
-        //entities.push(PLAYER_STRUCT);
+        entities.push(player_to_add);
 
         entities[entities.length-1].id = current_id;
         client.emit('assignID', current_id);

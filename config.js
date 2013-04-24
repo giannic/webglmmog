@@ -48,8 +48,8 @@ var move_x, move_y;
     exports.BULLET_LIFE = 100;
     exports.BULLET_RADIUS = 5;
     exports.BULLET_VELOCITY = 200; // AHHH need to do ray intersection!
-    exports.BULLET_SEG_X = 5; // segments in sphere
-    exports.BULLET_SEG_Y = 5;
+    exports.BULLET_SEG_X = 3; // segments in sphere
+    exports.BULLET_SEG_Y = 4;
 
     exports.GRAVITY = 6;
     exports.ENV_SIZE = 20000;

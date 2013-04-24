@@ -194,6 +194,22 @@ GameEngine.prototype.updatePlayers = function() {
                 game.entities[update.id].mesh.rotation.z += CONFIG.ROLL_VELOCITY; // ROLL BACK
             }
         }
+
+        // player YAW
+        if (update.move_x) {
+            game.entities[update.id].mesh.rotation.y -= move_x*CONFIG.MOUSE_MOVE_RATIO;
+
+            // If mouse moves enough, plane will also roll
+            if (update.move_x > CONFIG.MOUSE_ROLL_THRESHOLD &&
+                game.entities[update.id].mesh.rotation.z > -CONFIG.ROLL_LIMIT) { // rightward
+                game.entities[update.id].mesh.rotation.z -= CONFIG.ROLL_VELOCITY;
+            } else if (update.move_x < -CONFIG.MOUSE_ROLL_THRESHOLD &&
+                       game.entities[update.id].mesh.rotation.z > -CONFIG.ROLL_LIMIT) { // leftward
+                game.entities[update.id].mesh.rotation.z += CONFIG.ROLL_VELOCITY;
+            } else {
+            }
+            //move_x = 0; // reset for next frame
+        }
     });
     this.entities_updates.length = 0; // clear updates for this frame
 }
@@ -205,6 +221,9 @@ GameEngine.prototype.updateBullets = function() {
             this.bullets[b].mesh.position.x += this.bullets[b].velocity.x;
             this.bullets[b].mesh.position.z += this.bullets[b].velocity.z;
             //this.bullets[b].mesh.position.y += this.bullets[b].velocity.y;
+        } else {
+            ///WORLD.scene.remove(this.bullets[b].mesh);
+            this.bullets.splice(b,1);
         }
     }
 }

@@ -75,7 +75,7 @@ $(document).ready(function() {
     function moveCallback(e) {
         move_x = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
         move_y = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
-        socket.emit("mousemove", {"id": id, "move_x": move_x});
+        //socket.emit("mousemove", {"id": id, "move_x": move_x});
     }
 
     document.addEventListener('pointerlockchange', changeCallback, false);
@@ -150,7 +150,7 @@ $(document).ready(function() {
     // this should probably be pushed to entities_updates
     // instead of being updated here
     socket.on('updatePlayerRotation', function(data) {
-        game.entities[data.id].mesh.rotation.y -= data.move_x * CONFIG.MOUSE_MOVE_RATIO;
+        //game.entities[data.id].mesh.rotation.y -= data.move_x * CONFIG.MOUSE_MOVE_RATIO;
     });
 
 
