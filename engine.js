@@ -196,8 +196,9 @@ GameEngine.prototype.updatePlayers = function() {
         }
 
         // player YAW
+        console.log(update.move_x);
         if (update.move_x) {
-            game.entities[update.id].mesh.rotation.y -= move_x*CONFIG.MOUSE_MOVE_RATIO;
+            game.entities[update.id].mesh.rotation.y -= update.move_x*CONFIG.MOUSE_MOVE_RATIO;
 
             // If mouse moves enough, plane will also roll
             if (update.move_x > CONFIG.MOUSE_ROLL_THRESHOLD &&
