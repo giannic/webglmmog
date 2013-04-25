@@ -122,7 +122,7 @@ GameEngine.prototype.updateMyself = function() {
     }
     */
 
-    if (keys[KEY.DROP]) {
+    else if (keys[KEY.DROP]) {
         WORLD.player.mesh.translateY(-CONFIG.PLAYER_DROP_VELOCITY);
     }
 
@@ -203,11 +203,11 @@ GameEngine.prototype.updatePlayers = function() {
             }
         }
 
-        if (keys[KEY.LIFT]) {
+        if (update.keys[KEY.LIFT]) {
             game.entities[update.id].mesh.translateY(CONFIG.PLAYER_LIFT_VELOCITY);
         }
 
-        if (keys[KEY.DROP]) {
+        if (update.keys[KEY.DROP]) {
             game.entities[update.id].mesh.translateY(-CONFIG.PLAYER_DROP_VELOCITY);
         }
 
