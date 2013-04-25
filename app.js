@@ -98,7 +98,7 @@ io.sockets.on('connection', function (client) {
         console.log("===================================================");
         console.log("Disconnected ID: " + id);
         client.broadcast.emit('player_disconnect', player_data.id);
-        entities[player_data.id].active = false;
+        entities[id].active = false;
     });
 
     //client.on('mousemove', function (data) {

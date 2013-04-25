@@ -102,7 +102,9 @@ GameEngine.prototype.updateMyself = function() {
 
     //if (keys[KEY.LIFT] && player_pitch < CONFIG.PITCH_LIMIT) {
     if (keys[KEY.LIFT]) {
+        WORLD.player.mesh.rotation.z = 0; // reset rotation  for translations
         WORLD.player.mesh.translateY(CONFIG.PLAYER_LIFT_VELOCITY);
+        WORLD.player.mesh.rotation.z = player_roll; // set rotation again
 
         //var rotm = new THREE.Matrix4();
         /*
@@ -123,7 +125,9 @@ GameEngine.prototype.updateMyself = function() {
     */
 
     else if (keys[KEY.DROP]) {
+        WORLD.player.mesh.rotation.z = 0; // reset rotation  for translations
         WORLD.player.mesh.translateY(-CONFIG.PLAYER_DROP_VELOCITY);
+        WORLD.player.mesh.rotation.z = player_roll; // set rotation again
     }
 
     // YAW by MOUSE
@@ -204,11 +208,15 @@ GameEngine.prototype.updatePlayers = function() {
         }
 
         if (update.keys[KEY.LIFT]) {
+            game.entities[update.id].mesh.rotation.z = 0;
             game.entities[update.id].mesh.translateY(CONFIG.PLAYER_LIFT_VELOCITY);
+            game.entities[update.id].mesh.rotation.z = player_roll;
         }
 
         if (update.keys[KEY.DROP]) {
+            game.entities[update.id].mesh.rotation.z = 0;
             game.entities[update.id].mesh.translateY(-CONFIG.PLAYER_DROP_VELOCITY);
+            game.entities[update.id].mesh.rotation.z = player_roll;
         }
 
 
