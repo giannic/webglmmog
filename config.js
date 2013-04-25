@@ -41,7 +41,8 @@ var move_x, move_y;
 
     // plane rolling
     exports.ROLL_VELOCITY = Math.PI/360;
-    exports.ROLL_LIMIT = Math.PI/18;
+    //exports.ROLL_LIMIT = Math.PI/18;
+    exports.ROLL_LIMIT = Math.PI/9;
     exports.MOUSE_ROLL_THRESHOLD = 10;
 
     //plane pitching

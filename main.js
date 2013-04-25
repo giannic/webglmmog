@@ -42,6 +42,11 @@ $(document).ready(function() {
         emit_attack();
     });
 
+    // closing user
+    function disable_listeners() {
+        $(document).unbind('click');
+    }
+
 
     /****************
      * POINTER LOCK *
@@ -171,5 +176,16 @@ $(document).ready(function() {
 
         game.bullets[game.bullets.length-1].mesh.position = bullet_data.pos;
         WORLD.scene.add(game.bullets[game.bullets.length-1].mesh);
+    });
+
+    socket.on('hit', function(player_data) {
+        //if myself
+        if (player_data.id = id) {
+            alert("You died! Refresh the page to try again.");
+        }
+        game.entities[player_data.id].active = false;
+        WORLD.scene.remove(game.entities[player_data.id].mesh);
+
+        disable_listeners(); // prevent users from doing anything afterwards
     });
 });

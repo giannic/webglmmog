@@ -32,7 +32,7 @@ function render_clouds() {
              vertexShader: document.getElementById( 'vs' ).textContent,
              fragmentShader: document.getElementById( 'fs' ).textContent,
              depthWrite: false,
-             depthTest: false,
+             depthTest: true,
              transparent: true
     } );
 

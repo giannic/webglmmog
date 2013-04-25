@@ -287,8 +287,13 @@ GameEngine.prototype.checkCollisions = function() {
                     // for now, set hit to red
                     this.entities[p].mesh.material = WORLD.player_material_hit;
 
+                    // remove player and bullet model
                     WORLD.scene.remove(this.bullets[b].mesh);
+                    WORLD.scene.remove(this.entities[p].mesh); // remove
+                    this.entities[p].active = false;
                     this.bullets.splice(b,1);
+                    // tell all the other players the player was hit
+                    socket.emit("hit", {id: this.entities[p].id});
                     break;
                 }
             }

@@ -90,6 +90,10 @@ io.sockets.on('connection', function (client) {
         client.broadcast.emit('new_bullet', bullet_data);
     });
 
+    client.on('hit', function(hit_player_data) {
+        client.broadcast.emit('hit', hit_player_data);
+    });
+
     /*
      * My own disconnect function
      */
@@ -136,7 +140,6 @@ io.sockets.on('connection', function (client) {
         if (player.active === false) return;
 
         var player_roll;
-
         player_roll = player.mesh.rotation.z;
 
         if (data.keys[KEY.FORWARD]) {
@@ -148,52 +151,17 @@ io.sockets.on('connection', function (client) {
         }
 
         if (data.keys[KEY.LEFT]) {
-            //player.mesh.rotation.z = 0;
-
             player.mesh.translateX(-CONFIG.PLAYER_VELOCITY);
-
-            /*
-            player.mesh.rotation.z = player_roll;
-            if (player_roll < CONFIG.ROLL_LIMIT) {
-                player.mesh.rotation.z += CONFIG.ROLL_VELOCITY; // ROLL
-            }
-            */
-        }/* else if (player_roll > 0) {
-            // rolled, but released key
-            //player.mesh.rotation.z -= CONFIG.ROLL_VELOCITY; // ROLL BACK
-        }*/
+        }
 
         if (data.keys[KEY.RIGHT]) {
-            //player.mesh.rotation.z = 0;
-
             player.mesh.translateX(CONFIG.PLAYER_VELOCITY);
+        }
 
-            /*
-            player.mesh.rotation.z = player_roll;
-            if (player_roll > -CONFIG.ROLL_LIMIT) {
-                player.mesh.rotation.z -= CONFIG.ROLL_VELOCITY; // ROLL
-            }
-            */
-        }/* else if (player_roll < 0) {
-            // rolled, but released key
-            //player.mesh.rotation.z += CONFIG.ROLL_VELOCITY; // ROLL BACK
-        }*/
-
-        //if (keys[KEY.LIFT] && player_pitch < CONFIG.PITCH_LIMIT) {
         if (data.keys[KEY.LIFT]) {
             player.mesh.translateY(CONFIG.PLAYER_LIFT_VELOCITY);
-
-            //var rotm = new THREE.Matrix4();
-            /*
-            WORLD.player.mesh.matrix.multiply(rotm);
-            WORLD.player.mesh.rotation.setEulerFromRotationMatrix(WORLD.player.mesh.matrix, WORLD.player.mesh.order);
-            */
-
-            //WORLD.player.mesh.rotateX(CONFIG.PITCH_VELOCITY);
-            //WORLD.player.mesh.rotation.x += CONFIG.PITCH_VELOCITY; // ROLL BACK
-        } /*else if (player_pitch > 0) {
         }
-        */
+
         if (data.keys[KEY.DROP]) {
             player.mesh.translateY(-CONFIG.PLAYER_DROP_VELOCITY);
         }
@@ -202,6 +170,7 @@ io.sockets.on('connection', function (client) {
             player.mesh.rotation.y -= data.move_x*CONFIG.MOUSE_MOVE_RATIO;
 
             // If mouse moves enough, plane will also roll
+            /*
             if (data.move_x > CONFIG.MOUSE_ROLL_THRESHOLD &&
                 player.mesh.rotation.z > -CONFIG.ROLL_LIMIT) { // right
                 player.mesh.rotation.z -= CONFIG.ROLL_VELOCITY;
@@ -210,6 +179,7 @@ io.sockets.on('connection', function (client) {
                 player.mesh.rotation.z += CONFIG.ROLL_VELOCITY;
             } else {
             }
+            */
             //move_x = 0; // reset for next frame
         }
     }
