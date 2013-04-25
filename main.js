@@ -9,6 +9,7 @@ $(document).ready(function() {
     init_stats();
     init_world();
     init_client();
+    render_clouds();
 
     // THREEX utilities init
     THREEx.WindowResize(WORLD.renderer, WORLD.camera);
@@ -105,6 +106,7 @@ $(document).ready(function() {
             //game.entities[p].mesh.position.x = server_entities[p].pos.x;
             //game.entities[p].mesh.position.z = server_entities[p].pos.z;
             game.entities[p].mesh.position.x = server_entities[p].mesh.position.x;
+            game.entities[p].mesh.position.y = server_entities[p].mesh.position.y;
             game.entities[p].mesh.position.z = server_entities[p].mesh.position.z;
             game.entities[p].mesh.rotation.y = server_entities[p].mesh.rotation.y;
             game.entities[p].mesh.castShadow = true;

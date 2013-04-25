@@ -167,6 +167,7 @@ GameEngine.prototype.updatePlayers = function() {
         current_mesh = current_player.mesh;
         player_roll = current_mesh.rotation.z;
 
+        // don't update inactiive players
         if (current_player.active === false) {
             return true; //equivalent to a continue statement
         }
