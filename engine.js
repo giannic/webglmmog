@@ -124,7 +124,7 @@ GameEngine.prototype.updateMyself = function() {
     }
     */
 
-    else if (keys[KEY.DROP]) {
+    if (keys[KEY.DROP]) {
         WORLD.player.mesh.rotation.z = 0; // reset rotation  for translations
         WORLD.player.mesh.translateY(-CONFIG.PLAYER_DROP_VELOCITY);
         WORLD.player.mesh.rotation.z = player_roll; // set rotation again
