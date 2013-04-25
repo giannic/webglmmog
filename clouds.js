@@ -2,6 +2,13 @@
  * Modified from Clouds by MRDOOB
  */
 
+// CLOUD CONSTANTS
+var NUM_CLUSTERS = 50;
+var CLOUDS_PER_CLUSTER = 20;
+var CLUSTER_RANGE = 2000;
+var CLOUD_MAX_SIZE = 70;
+var CLOUD_MIN_SIZE = 10;
+
 var geometry, mesh, material;
 function render_clouds() {
     geometry = new THREE.Geometry();
@@ -10,8 +17,7 @@ function render_clouds() {
     texture.magFilter = THREE.LinearMipMapLinearFilter;
     texture.minFilter = THREE.LinearMipMapLinearFilter;
 
-    //var fog = new THREE.Fog( 0x4584b4, - 100, 3000 );
-    var fog = new THREE.Fog( 0xd7e1e9, - 100, 3000 );
+    var fog = new THREE.Fog( 0xc4ccd2, - 100, 3000 );
 
     material = new THREE.ShaderMaterial( {
         uniforms: {
@@ -32,11 +38,7 @@ function render_clouds() {
 
     var plane = new THREE.Mesh( new THREE.PlaneGeometry( 64, 64 ) );
 
-    var NUM_CLUSTERS = 50;
-    var CLOUDS_PER_CLUSTER = 20;
-    var CLUSTER_RANGE = 2000;
-    var CLOUD_MAX_SIZE = 70.5;
-    var CLOUD_MIN_SIZE = 10.5;
+
 
     var cluster_center = {x:0, y:0, z:0};
     for ( var i = 0; i < NUM_CLUSTERS; i++ ) {

@@ -111,7 +111,10 @@ $(document).ready(function() {
             game.entities[p].mesh.rotation.y = server_entities[p].mesh.rotation.y;
             game.entities[p].mesh.castShadow = true;
             game.entities[p].mesh.receiveShadow = true;
-            WORLD.scene.add(game.entities[p].mesh);
+
+            if (server_entities[p].active === true) {
+                WORLD.scene.add(game.entities[p].mesh);
+            }
         }
         WORLD.player = game.entities[game.entities.length-1];
         WORLD.player.mesh.add(WORLD.camera);

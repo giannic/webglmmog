@@ -57,8 +57,8 @@ var move_x, move_y;
     exports.COLLISION_STEP = 1;
 
     exports.GRAVITY = 6;
-    exports.ENV_SIZE = 20000;
+    exports.ENV_SIZE = 30000;
     //exports.MOUSE_MOVE_RATIO = 0.01; // how much mouse moves vs how much yaw
-    exports.MOUSE_MOVE_RATIO = 0.005; // how much mouse moves vs how much yaw
+    exports.MOUSE_MOVE_RATIO = 0.004; // how much mouse moves vs how much yaw
 
 }) (typeof exports === 'undefined' ? this['CONFIG'] = {}: exports);
