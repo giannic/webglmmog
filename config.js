@@ -30,7 +30,7 @@ var move_x, move_y;
     exports.IMG_PATH = "images/";
 
     // CONSTANTS
-    exports.PLAYER_RADIUS = 20;
+    exports.PLAYER_RADIUS = 100;
     exports.PLAYER_SEG_X = 8;
     exports.PLAYER_SEG_Y = 8;
     exports.PLAYER_VELOCITY = 15;
@@ -50,6 +50,8 @@ var move_x, move_y;
     exports.BULLET_VELOCITY = 200; // AHHH need to do ray intersection!
     exports.BULLET_SEG_X = 3; // segments in sphere
     exports.BULLET_SEG_Y = 4;
+
+    exports.COLLISION_STEP = 1;
 
     exports.GRAVITY = 6;
     exports.ENV_SIZE = 20000;

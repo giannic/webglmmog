@@ -122,7 +122,7 @@ io.sockets.on('connection', function (client) {
 
     // no rolling for now
     function update_player(player, data) {
-        if (player === 'undefined' || data === 'undefined') return;
+        if (player === undefined || data === undefined) return;
 
         var player_roll;
 

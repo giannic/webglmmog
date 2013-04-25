@@ -158,11 +158,14 @@ $(document).ready(function() {
     // new bullet from another player
     socket.on('new_bullet', function(bullet_data) {
         game.bullets.push(new TYPE.Bullet(game,
-                                          bullet_data.dir,
+                                          new THREE.Vector3(bullet_data.dir.x,
+                                                            bullet_data.dir.y,
+                                                            bullet_data.dir.z),
                                           new THREE.Mesh(WORLD.bullet_geometry,
                                                          WORLD.bullet_material))
                          );
-        game.bullets[game.bullets.length-1].mesh.position = bullet_data.pos
+
+        game.bullets[game.bullets.length-1].mesh.position = bullet_data.pos;
         WORLD.scene.add(game.bullets[game.bullets.length-1].mesh);
     });
 });
