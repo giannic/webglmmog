@@ -122,6 +122,10 @@ GameEngine.prototype.updateMyself = function() {
     }
     */
 
+    if (keys[KEY.DROP]) {
+        WORLD.player.mesh.translateY(-CONFIG.PLAYER_DROP_VELOCITY);
+    }
+
     // YAW by MOUSE
     if (move_x) {
         WORLD.player.mesh.rotation.y -= move_x*CONFIG.MOUSE_MOVE_RATIO;
@@ -159,6 +163,10 @@ GameEngine.prototype.updatePlayers = function() {
         current_mesh = current_player.mesh;
         player_roll = current_mesh.rotation.z;
 
+        if (current_player.active === false) {
+            return true; //equivalent to a continue statement
+        }
+
         if (update.keys[KEY.FORWARD]) {
             game.entities[update.id].mesh.translateZ(-CONFIG.PLAYER_VELOCITY);
         }
@@ -194,6 +202,16 @@ GameEngine.prototype.updatePlayers = function() {
                 game.entities[update.id].mesh.rotation.z += CONFIG.ROLL_VELOCITY; // ROLL BACK
             }
         }
+
+        if (keys[KEY.LIFT]) {
+            game.entities[update.id].mesh.translateY(CONFIG.PLAYER_LIFT_VELOCITY);
+        }
+
+        if (keys[KEY.DROP]) {
+            game.entities[update.id].mesh.translateY(-CONFIG.PLAYER_DROP_VELOCITY);
+        }
+
+
 
         // player YAW
         if (update.move_x) {
@@ -236,7 +254,6 @@ GameEngine.prototype.updateBullets = function() {
  * This way, we don't miss players if bullet velocity is too high
  */
 GameEngine.prototype.checkCollisions = function() {
-    var stepcount;
     var diff, step_pos, dir, bullet_pos;
 
     diff = new THREE.Vector3();
@@ -245,19 +262,18 @@ GameEngine.prototype.checkCollisions = function() {
 
     for (var p in this.entities) {
         for (var b in this.bullets) {
-            stepcount = 0;
             bullet_pos = this.bullets[b].mesh.position;
             dir = this.bullets[b].velocity.clone();
 
             for (var d = 0;
                      d < CONFIG.BULLET_VELOCITY;
                      d += CONFIG.COLLISION_STEP) {
-                stepcount++;
                 dir.setLength(d * -CONFIG.COLLISION_STEP);
                 step_pos.addVectors(this.bullets[b].mesh.position, dir);
                 diff.subVectors(this.entities[p].mesh.position, step_pos); //r58
                 //diff.sub(this.entities[p].mesh.position, step_pos); //r54
                 if (this.entities[p] !== WORLD.player &&
+                    this.entities[p].active === true &&
                     diff.length() < CONFIG.PLAYER_RADIUS + CONFIG.BULLET_RADIUS) {
                     // for now, set hit to red
                     this.entities[p].mesh.material = WORLD.player_material_hit;
@@ -267,7 +283,6 @@ GameEngine.prototype.checkCollisions = function() {
                     break;
                 }
             }
-            console.log("stepcount: " + stepcount);
         }
     }
 }

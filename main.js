@@ -16,28 +16,22 @@ $(document).ready(function() {
     /*******************
      * ACTION BINDINGS *
      *******************/
+    // When quitting the game, send this player id to the server
+    window.onbeforeunload = function() {
+        socket.emit('hello', {"id": id}); // disconnect signal
+    };
+
     $(document)
     .keydown(function(e) {
-        var k;
         e.preventDefault();
-
+        var k;
         k = (e.keyCode ? e.keyCode : e.which);
 
-        var dir;
         keys[k] = true;
-
-        // id: player_id
-        // dir: direction player is facing
-        //dir = get_my_direction(); // returns Vector3
-        //pos = {"x": WORLD.player.mesh.position.x,
-               //"y": WORLD.player.mesh.position.y,
-               //"z": WORLD.player.mesh.position.z};
-        //socket.emit('keydown', {"id": id, "pos": pos, "dir": dir, "keys": keys, "move_x": move_x});
-
     })
     .keyup(function(e) {
+        e.preventDefault();
         var k;
-        //e.preventDefault();
         k = (e.keyCode ? e.keyCode : e.which);
         if (k in keys) {
             keys[k] = false;
@@ -106,7 +100,7 @@ $(document).ready(function() {
                                           WORLD.player_material),
                            new THREE.Vector3(0,0,0), // direction
                            0, // velocity
-                           true));
+                           server_entities[p].active));
 
             //game.entities[p].mesh.position.x = server_entities[p].pos.x;
             //game.entities[p].mesh.position.z = server_entities[p].pos.z;
@@ -135,8 +129,13 @@ $(document).ready(function() {
         WORLD.scene.add(game.entities[game.entities.length-1].mesh);
     });
 
-    socket.on('disconnect', function() {
-        socket.emit('playerDisconnect', {"id": id});
+    /*
+     * Signal when ANOTHER players disconnects
+     */
+    socket.on('player_disconnect', function(id) {
+        game.entities[id].active = false;
+        WORLD.scene.remove(game.entities[id].mesh);
+        //alert(id);
     });
 
 

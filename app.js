@@ -20,7 +20,7 @@ var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
-io.set('log level', 1);
+io.set('log level', 0);
 
 var routes = require('./routes')
   , user = require('./routes/user')
@@ -67,8 +67,6 @@ app.get('/users', user.list);
 WORLD.player_mesh = CORE.init_player_mesh(); // represented by cube here
 WORLD.player_material = CORE.init_player_material();
 
-
-
 io.sockets.on('connection', function (client) {
     // set up just connected player
     client.on('client_complete', function() {
@@ -92,10 +90,20 @@ io.sockets.on('connection', function (client) {
         client.broadcast.emit('new_bullet', bullet_data);
     });
 
+    /*
+     * My own disconnect function
+     */
+    client.on('hello', function(player_data) {
+        var id = player_data.id;
+        console.log("===================================================");
+        console.log("Disconnected ID: " + id);
+        client.broadcast.emit('player_disconnect', player_data.id);
+        entities[player_data.id].active = false;
+    });
+
     //client.on('mousemove', function (data) {
         //client.broadcast.emit('updatePlayerRotation', data);
     //});
-
 
     /*
      * Helper functions to sync server and client
@@ -123,6 +131,7 @@ io.sockets.on('connection', function (client) {
     // no rolling for now
     function update_player(player, data) {
         if (player === undefined || data === undefined) return;
+        if (player.active === false) return;
 
         var player_roll;
 
@@ -183,6 +192,9 @@ io.sockets.on('connection', function (client) {
         } /*else if (player_pitch > 0) {
         }
         */
+        if (data.keys[KEY.DROP]) {
+            player.mesh.translateY(-CONFIG.PLAYER_DROP_VELOCITY);
+        }
 
         if (data.move_x) {
             player.mesh.rotation.y -= data.move_x*CONFIG.MOUSE_MOVE_RATIO;
