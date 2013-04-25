@@ -39,7 +39,7 @@
             <div class="slides">
 
                 <section>
-                    <h2>WebGL Multiplayer Online Game</h2>
+                    <h2>WebGL Multiplayer <br/>Online Game</h2>
                     <h4>Digital Media Design <br/>Senior Capstone Project</h4>
                     <p>
                         <small>By <a href="http://www.giannic.com">Gianni Chen</a></small>
@@ -61,10 +61,11 @@
                     </section>
 
                     <section>
-                        <h2>So, what is it not?</h2>
+                        <h2>So, what is it <b>not</b> ?</h2>
                         <p>
                             The next World of Warcraft.
                         </p>
+                        <small class="fragment">It's better</small>
                     </section>
 
                     <section>
@@ -94,6 +95,7 @@
                             <ul>
                                 <small><li>particularly multiplayer</li></small>
                             </ul>
+                            <li>I have never wrote code for networking</li>
                             <li>The only other one I know of is "Nomo Racer"</li>
                             <ul>
                                 <small><li>which was taken offline and also built specifically for racing</li></small>
@@ -118,31 +120,7 @@
                     </section>
                 </section>
 
-                <!-- SECTION 2: Structure -->
-                <section>
-                    <section>
-                        <h1>Structure</h1>
-                    </section>
-
-                    <section>
-                        <h2>Client-Server Model</h2>
-                        <ul>
-                            <li>Central server</li>
-                            <li>Each client connects to this server</li>
-                            <li>Clients send messages to server</li>
-                            <li>Server relays messages to all other clients</li>
-                            <li>Server and clients store copies of the same information</li>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h2>Model Illustrated</h2>
-                        <img src="presentation_images/tobiko_graph.png"
-                             alt="Model Flow Chart"
-                             style="padding: 10px"/>
-                    </section>
-                </section>
-
+                <!-- SECTION 2: Tools -->
                 <section>
                     <section>
                         <h1>Tools</h1>
@@ -176,16 +154,63 @@
                     </section>
                 </section>
 
-                <!-- SECTION 3: Lessons learned -->
+                <!-- SECTION 3: Structure -->
+                <section>
+                    <section>
+                        <h1>Structure</h1>
+                    </section>
+
+                    <section>
+                        <h2>Client-Server Model</h2>
+                        <ul>
+                            <li>Central server</li>
+                            <li>Each client connects to this server</li>
+                            <li>Clients only exchange messages with the server</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>The Server</h2>
+                        <ol>
+                            <li>Assigns an ID to each client that connects</li>
+                            <li>Tells existing clients about new connections</li>
+                            <li>Listens for messages from all clients</li>
+                            <li>If the message affects other clients, broadcast to everyone else</li>
+                            <li>Updates and checks the copy of the states of all clients</li>
+                        </ol>
+                    </section>
+
+                    <section>
+                        <h2>The Client</h2>
+                        <ol>
+                            <li>Loads all the necessary assets on connect</li>
+                            <li>Makes request to server for data of all other clients</li>
+                            <li>Listens for updates from the server</li>
+                            <li>Updates state changes for everyone on each frame</li>
+                        </ol>
+                    </section>
+
+                    <section>
+                        <h2>Model Illustrated</h2>
+                        <img src="presentation_images/tobiko_graph.png"
+                             alt="Model Flow Chart"
+                             style="padding: 10px"/>
+                    </section>
+                </section>
+
+                <!-- SECTION 4: Lessons learned -->
                 <section>
                     <section>
                         <h1>Lessons Learned</h1>
                     </section>
 
                     <section>
-                        <h2>The Graphics</h2>
+                        <h2>General</h2>
                         <ul>
-                            <li></li>
+                            <li>WebGL and Three.js</li>
+                            <li>Game programming practices</li>
+                            <li>Sharing code between client and server</li>
+                            <li>Node.js and Express</li>
                         </ul>
                     </section>
 
@@ -193,9 +218,11 @@
                         <h2>The Network</h2>
                         <ul>
                             <li>Maintaining a "heartbeat" between clients</li>
-                            <li>Confirming (quickly) that server and client states match</li>
-                            <li>Real-time synchronization</li>
+                            <li>Matching (quickly) the server and client states</li>
+                            <li>Socket.io</li>
                         </ul>
+                        <br/><br/>
+                        <p><small>... is all really hard</small></p>
                     </section>
 
                     <section>
