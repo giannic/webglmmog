@@ -47,11 +47,12 @@ The following javascript packages are required for installation:
 - jquery
 - node.js
 - socket.io
-three.js
+- three.js
 
 ## Build instructions
 1. npm install  
 2. node app  
+3. Connect to port 3000  
 
 ## three.js
 Currently using: THREE.js r58
