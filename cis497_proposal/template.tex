@@ -236,9 +236,27 @@ A list of resources that I used, but did not quite belong in references.
 I will fill in the following sections as I make progress on my project, particularly for the alpha review and the final deliverable. % In these sections, list pseudo-code, charts, images, examples, etc. to show what you’ve done over the course of the semester.
 
 \section{Method}
+
 \section{Results}
+    The game framework I made was straightforward to expand to a demo game. It has implemented a 3D environment that allows different clients to connect to the same space online, and interact with one another. The sample game implements this in the form of a spaceship game where the players try to eliminate each other by shooting bullets. However, the code base allows this to be easily modified to any form of clients, interactions, or environments. \\\\
+    The documentation allows for easy onboarding of a developer who can then write simple utility functions to define the types of assets that should be loaded, the interactions they would like between clients, the environment that would like, and many other configurations.
+
 \section{Conclusions}
+    I was able to achieve a solid proof of concept for a technology stack that uses WebGL, WebSockets, and Node.js to host a multiplayer online game framework as well as make a demo game out of it. I also achieve a personal goal of learning all of these technologies as well as the concepts behind making a game. This experience has allowed me to learn yet another stack of skills that I can refer back to in academics and in the industry. I hope this will be a useful contribution to both the online developers and the research community.
+
 \section{Future Work}
+\begin{itemize}
+    \item{Entity Interpolation (Valve)}
+        \subitem{Latency Compensation}
+    \item{Collisions between players}
+    \item{Dead (Ded) Reckoning with acceleration (currently only velocity)}
+    \item{Network and Client side optimizations}
+    \item{Expose game states to clients}
+    \item{Environment obstacles}
+    \item{More variety on models}
+    \item{Higher quality graphics}
+\end{itemize}
+
 
 \bibliographystyle{acmsiggraph}
 \bibliography{template}
