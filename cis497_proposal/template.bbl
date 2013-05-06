@@ -1,0 +1,54 @@
+\begin{thebibliography}{\protect\citename{Lecollinet and Lecollinet }2012}
+
+\bibitem[\protect\citename{allergic }2013]{AJK13}
+{\sc allergic, jswisher, k. e.~a.}, 2013.
+\newblock Mozilla developer network: Webgl.
+\newblock https://developer.mozilla.org/en-US/docs/WebGL.
+
+\bibitem[\protect\citename{Despoulain }2012]{D12}
+{\sc Despoulain, T.}, 2012.
+\newblock Hexgl.
+\newblock http://hexgl.bkcore.com.
+
+\bibitem[\protect\citename{I.~Fette }2011]{FM11}
+{\sc I.~Fette, A.~M.}, 2011.
+\newblock Websockets.
+\newblock http://www.websocket.org/aboutwebsocket.html, December.
+
+\bibitem[\protect\citename{Jacob }2012]{J12}
+{\sc Jacob, B.}, 2012.
+\newblock Fitc spotlight javascript: Introduction to webgl.
+\newblock http://people.mozilla.org/~bjacob/webgl-spotlight-js-2012/.
+
+\bibitem[\protect\citename{Kankaanpaa }2004]{K04}
+{\sc Kankaanpaa, H.}, 2004.
+\newblock Doing gravity right {@ONLINE}.
+\newblock http://www.niksula.hut.fi/~hkankaan/Homepages/gravity.html.
+
+\bibitem[\protect\citename{Lecollinet and Lecollinet }2012]{LL12}
+{\sc Lecollinet, G., and Lecollinet, F.}, 2012.
+\newblock Browserquest.
+\newblock http://www.littleworkshop.fr/browserquest.html.
+
+\bibitem[\protect\citename{Marrin }2011]{M11}
+{\sc Marrin, C.}, 2011.
+\newblock Webgl specification.
+\newblock https://www.khronos.org/registry/webgl/specs/1.0/.
+
+\bibitem[\protect\citename{Perez-Fadon }2012]{P12}
+{\sc Perez-Fadon, D.}, 2012.
+\newblock Dcubic.
+\newblock http://www.dcubic.net/html5/.
+
+\bibitem[\protect\citename{Russel and Mo }2012]{RM12}
+{\sc Russel, K., and Mo, Z.}, 2012.
+\newblock Graphics programming for the web: Webgl.
+\newblock ACM SIGGRAPH 2012 Course Slides, August.
+
+\bibitem[\protect\citename{Vanik }2012]{V12}
+{\sc Vanik, B.}, 2012.
+\newblock Acm siggraph presentation: Multiplayer javascript/webgl voxel world
+  game.
+\newblock https://github.com/benvanik/blk-game.
+
+\end{thebibliography}
