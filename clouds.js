@@ -13,12 +13,14 @@ var geometry, mesh, material;
 function render_clouds() {
     geometry = new THREE.Geometry();
 
+    // texture
     var texture = THREE.ImageUtils.loadTexture('images/cloud.png');
     texture.magFilter = THREE.LinearMipMapLinearFilter;
     texture.minFilter = THREE.LinearMipMapLinearFilter;
 
     var fog = new THREE.Fog( 0xc4ccd2, - 100, 3000 );
 
+    // material
     material = new THREE.ShaderMaterial( {
         uniforms: {
 
@@ -36,10 +38,11 @@ function render_clouds() {
              transparent: true
     } );
 
+    // plane for image
     var plane = new THREE.Mesh( new THREE.PlaneGeometry( 64, 64 ) );
 
 
-
+    // make planes in clusters to simulate cloud in 3D
     var cluster_center = {x:0, y:0, z:0};
     for ( var i = 0; i < NUM_CLUSTERS; i++ ) {
         cluster_center.x = Math.random() * CONFIG.ENV_SIZE - CONFIG.ENV_SIZE/2;
@@ -60,7 +63,8 @@ function render_clouds() {
         }
     }
 
-    mesh = new THREE.Mesh( geometry, material );
+    // add to scene
+    mesh = new THREE.Mesh(geometry, material);
     mesh.material.side = THREE.DoubleSide;
-    WORLD.scene.add( mesh );
+    WORLD.scene.add(mesh);
 }

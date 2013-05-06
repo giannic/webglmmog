@@ -1,6 +1,6 @@
-/*********
- * WORLD *
- *********/
+/**************
+ * WORLD VARS *
+ **************/
 (function (exports) {
     stats = 0;
     game = 0;

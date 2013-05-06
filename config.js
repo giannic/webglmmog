@@ -41,7 +41,6 @@ var move_x, move_y;
 
     // plane rolling
     exports.ROLL_VELOCITY = Math.PI/360;
-    //exports.ROLL_LIMIT = Math.PI/18;
     exports.ROLL_LIMIT = Math.PI/9;
     exports.MOUSE_ROLL_THRESHOLD = 10;
 
@@ -51,7 +50,7 @@ var move_x, move_y;
 
     exports.BULLET_LIFE = 100;
     exports.BULLET_RADIUS = 5;
-    exports.BULLET_VELOCITY = 200; // AHHH need to do ray intersection!
+    exports.BULLET_VELOCITY = 200;
     exports.BULLET_SEG_X = 3; // segments in sphere
     exports.BULLET_SEG_Y = 4;
 
@@ -59,7 +58,6 @@ var move_x, move_y;
 
     exports.GRAVITY = 6;
     exports.ENV_SIZE = 30000;
-    //exports.MOUSE_MOVE_RATIO = 0.01; // how much mouse moves vs how much yaw
     exports.MOUSE_MOVE_RATIO = 0.004; // how much mouse moves vs how much yaw
 
 }) (typeof exports === 'undefined' ? this['CONFIG'] = {}: exports);

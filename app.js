@@ -1,4 +1,7 @@
-/**
+/***************
+ * Server File *
+ ***************/
+/*
  * Global Constants
  */
 
@@ -28,12 +31,18 @@ var routes = require('./routes')
   , fs = require('fs')
   , THREE = require('three');
 
-// my own utilities
+/*
+ * Game dependencies
+ */
 var TYPE = require('./entities.js')
   , CONFIG = require('./config.js')
   , WORLD = require('./world.js')
   , CORE = require('./core.js');
 
+
+/*
+ * Server configuration
+ */
 server.listen(3000);
 
 app.configure(function(){
@@ -61,14 +70,16 @@ app.configure('development', function(){
 app.get('/', routes.index);
 app.get('/users', user.list);
 
-/************************************
- * setup on server side to be ready *
- ************************************/
+
+/*
+ * Main Server setup (to be ready for clients)
+ */
 WORLD.player_mesh = CORE.init_player_mesh(); // represented by cube here
 WORLD.player_material = CORE.init_player_material();
 
 io.sockets.on('connection', function (client) {
-    // set up just connected player
+
+    // Receive client complete setup status
     client.on('client_complete', function() {
         new_player();
 
@@ -79,23 +90,25 @@ io.sockets.on('connection', function (client) {
         client.emit('setupComplete'); // used to ensure mesh arent null
     });
 
-    // data: {"id":id, "dir":[x,y,z]}
+    // Receive client keypress
     client.on('keydown', function (player_data) {
         var player = entities[player_data.id];
         update_player(player, player_data);
         client.broadcast.emit('updatePlayer', player_data);
     });
 
+    // Receive client mouse click
     client.on('new_bullet', function(bullet_data) {
         client.broadcast.emit('new_bullet', bullet_data);
     });
 
+    // Receive client hit state
     client.on('hit', function(hit_player_data) {
         client.broadcast.emit('hit', hit_player_data);
     });
 
     /*
-     * My own disconnect function
+     * Receive client disconnect
      */
     client.on('hello', function(player_data) {
         var id = player_data.id;
@@ -106,10 +119,6 @@ io.sockets.on('connection', function (client) {
             entities[id].active = false;
         }
     });
-
-    //client.on('mousemove', function (data) {
-        //client.broadcast.emit('updatePlayerRotation', data);
-    //});
 
     /*
      * Helper functions to sync server and client
@@ -130,11 +139,16 @@ io.sockets.on('connection', function (client) {
         client.emit('assignID', current_id);
     }
 
+    /*
+     * Prompts client to setup the states of other clients
+     */
     function setup_players() {
         client.emit('setupPlayers', entities);
     }
 
-    // no rolling for now
+    /*
+     * Updates the player location on the server
+     */
     function update_player(player, data) {
         if (player === undefined || data === undefined) return;
         if (player.active === false) return;
@@ -168,19 +182,6 @@ io.sockets.on('connection', function (client) {
 
         if (data.move_x) {
             player.mesh.rotation.y -= data.move_x*CONFIG.MOUSE_MOVE_RATIO;
-
-            // If mouse moves enough, plane will also roll
-            /*
-            if (data.move_x > CONFIG.MOUSE_ROLL_THRESHOLD &&
-                player.mesh.rotation.z > -CONFIG.ROLL_LIMIT) { // right
-                player.mesh.rotation.z -= CONFIG.ROLL_VELOCITY;
-            } else if (data.move_x < -CONFIG.MOUSE_ROLL_THRESHOLD &&
-                       player.mesh.rotation.z > -CONFIG.ROLL_LIMIT) { // left
-                player.mesh.rotation.z += CONFIG.ROLL_VELOCITY;
-            } else {
-            }
-            */
-            //move_x = 0; // reset for next frame
         }
     }
 });

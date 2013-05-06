@@ -14,6 +14,7 @@
 - game.js
 - images/
 - lib/
+- main.js
 - obj/
 - package.json
 - routes/
@@ -37,6 +38,9 @@ This contains the base objects reused many times in the game.
 
 #### engine.js
 This runs the core logic of the game, including the calculation of all interactions between players.
+
+#### main.js
+Driver file that calls all the necessary functions to run the game.
 
 #### world.js
 This stores the variables of the world in the game.

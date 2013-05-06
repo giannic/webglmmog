@@ -1,3 +1,6 @@
+/*
+ * Template for Game Engine
+ */
 function Game() {
     GameEngine.call(this);
 }

@@ -1,3 +1,6 @@
+/*********************
+ * Object structures *
+ *********************/
 (function(exports){
 
 exports.hello = function() {
@@ -26,7 +29,6 @@ exports.Entity.prototype.draw = function() {}
 /*
  * Player
  */
-//function Player() {}
 exports.Player = function(game, id, mesh, dir, velocity, active) {
     exports.Entity.call(this, game, mesh);
     this.id = id;
@@ -49,7 +51,6 @@ exports.Player.prototype.draw = function(ctx) {
 /*
  * Bullet
  */
-//function Bulllet() {}
 exports.Bullet = function(game, velocity, mesh) {
     exports.Entity.call(this, game, mesh);
     this.velocity = velocity;

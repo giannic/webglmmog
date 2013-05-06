@@ -1,3 +1,6 @@
+/***************
+ * Game Engine *
+ ***************/
 function GameEngine() {
     this.entities = [];
     this.bullets = [];
@@ -37,13 +40,10 @@ GameEngine.prototype.draw = function(callback) {
  * UPDATES *
  ***********/
 
+/*
+ * Main update function
+ */
 GameEngine.prototype.update = function() {
-    /*
-    for (var p in this.entities) {
-        this.entities[p].mesh.material = WORLD.player_material;
-    }
-    */
-
     // emit to other players first
     dir = get_my_direction(); // returns Vector3
     pos = {"x": WORLD.player.mesh.position.x,
@@ -59,6 +59,9 @@ GameEngine.prototype.update = function() {
     WORLD.stats.update();
 }
 
+/*
+ * Update this client
+ */
 GameEngine.prototype.updateMyself = function() {
     var player_roll;
 
@@ -106,24 +109,6 @@ GameEngine.prototype.updateMyself = function() {
         WORLD.player.mesh.translateY(CONFIG.PLAYER_LIFT_VELOCITY);
         WORLD.player.mesh.rotation.z = player_roll; // set rotation again
 
-        //var rotm = new THREE.Matrix4();
-        /*
-        WORLD.player.mesh.matrix.multiply(rotm);
-        WORLD.player.mesh.rotation.setEulerFromRotationMatrix(WORLD.player.mesh.matrix, WORLD.player.mesh.order);
-        console.log("lifting");
-        */
-
-        //WORLD.player.mesh.rotateX(CONFIG.PITCH_VELOCITY);
-        //WORLD.player.mesh.rotation.x += CONFIG.PITCH_VELOCITY; // ROLL BACK
-    } /*else if (player_pitch > 0) {
-        var rotm = new THREE.Matrix4();
-        rotm.makeRotationX(CONFIG.PITCH_VELOCITY);
-        WORLD.player.mesh.matrix.multiply(rotm);
-        WORLD.player.mesh.rotation.setEulerFromRotationMatrix(WORLD.player.mesh.matrix, WORLD.player.mesh.order);
-        //WORLD.player.mesh.rotation.x -= CONFIG.PITCH_VELOCITY; // ROLL BACK
-    }
-    */
-
     if (keys[KEY.DROP]) {
         WORLD.player.mesh.rotation.z = 0; // reset rotation  for translations
         WORLD.player.mesh.translateY(-CONFIG.PLAYER_DROP_VELOCITY);
@@ -146,19 +131,10 @@ GameEngine.prototype.updateMyself = function() {
 
         move_x = 0; // reset for next frame
     }
-
-    // clear active keys on each update frame
-    /*
-    for (var k in keys) {
-        keys[k] = false;
-    }
-    */
 }
 
 /*
  * Updates for other players
- * But, this is essentially the same as update myself for now
- * Maybe should merge, and take in the player to update instead
  */
 GameEngine.prototype.updatePlayers = function() {
     var player_roll, current_player;

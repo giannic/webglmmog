@@ -1,6 +1,10 @@
-/******************
- * INIT FUNCTIONS *
- ******************/
+/*************************
+ * CLIENT INIT FUNCTIONS *
+ *************************/
+
+/*
+ * FPS Counter
+ */
 function init_stats() {
     WORLD.stats = new Stats();
     WORLD.stats.domElement.style.position = 'absolute';
@@ -9,6 +13,9 @@ function init_stats() {
     document.body.appendChild(WORLD.stats.domElement);
 }
 
+/*
+ * Main Caller for all inits
+ */
 function init_world() {
     // scene
     WORLD.scene = new THREE.Scene();
@@ -30,6 +37,9 @@ function init_world() {
 
 }
 
+/*
+ * Ground plane
+ */
 function init_landscape() {
     WORLD.plane_material = new THREE.MeshLambertMaterial({color: 0xEEEEEE});
     WORLD.plane_geometry = new THREE.PlaneGeometry(6000, 6000, 100, 100);
@@ -42,6 +52,9 @@ function init_landscape() {
     WORLD.scene.add(WORLD.plane_mesh);
 }
 
+/*
+ * Skybox
+ */
 function init_environment() {
     var cubemap, env, shader, materal,
         urls, format;
@@ -80,6 +93,9 @@ function init_environment() {
     WORLD.scene.add(env);
 }
 
+/*
+ * Scene lighting
+ */
 function init_light() {
     WORLD.light = new THREE.DirectionalLight(0xEEFFFF);
     WORLD.light.position.set(1, 10, 1);
@@ -89,16 +105,10 @@ function init_light() {
     WORLD.scene.add(WORLD.light);
 }
 
+/*
+ * Camera
+ */
 function init_client() {
-    /* // non-working pointer lock code
-    var element = $('canvas')[0];
-    element.requestPointerLock = element.requestPointerLock ||
-                                 element.mozRequestPointerLock ||
-                                 element.webkitRequestPointerLock;
-
-    element.requestPointerLock();
-    */
-
     WORLD.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, CONFIG.ENV_SIZE);
     WORLD.camera.useQuaternion = true;
     WORLD.camera.position.z = 500;
@@ -119,35 +129,6 @@ function init_player() {
         console.log("harrow loading geometry"); // OMGZOR GEOMETRY NOT LOADED
     });
 }
-
-// currently not in use
-/*
-function detect_collisions() {
-    var origin,
-        local_vertex, global_vertex,
-        direction, ray,
-        i, results;
-
-    origin = WORLD.player_mesh.position.clone();
-
-    for (i = 0; i < WORLD.player_mesh.geometry.vertices.length; i++) {
-        local_vertex = WORLD.player_mesh.vertices[i].clone();
-        global_vertex = local_vertex.applyMatrix4(WORLD.player_mesh.matrix);
-
-        // r54
-        //direction = global_vertex.sub(WORLD.player_mesh.position);
-
-        // r58
-        direction.subVectors(global_vertex, WORLD.player_mesh.position);
-
-        ray = new THREE.Raycaster(origin, direction.clone().normalize());
-        results = ray.intersectObjects(game.entities);
-        if (results.length > 0 && results[0].distance < direction.length()) {
-        }
-    }
-}
-*/
-
 
 /********************
  * UPDATE FUNCTIONS *
