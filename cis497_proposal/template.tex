@@ -215,6 +215,53 @@ The key here is that the users can interact with each other with minimal delay. 
 
 % You should insert a GANT CHART, see figure 2, to visualize your timeline of tasks. This timeline is very important for planning your time. Budget things the best you can and leave buffer space, especially at the end of the semester and before the alpha review, to account for tasks taking longer than expected. This is a 130 hour project, so we expect you to spend 10-12 hours per week over the course of the semester.  You can use tables in word or import an excel image to easily add such a table to this document.
 
+\hrulefill \\
+% In these sections, list pseudo-code, charts, images, examples, etc. to show what you’ve done over the course of the semester.
+
+\section{Method}
+\begin{itemize}
+    \item{\textbf{Server}: The server was set up initially to start serving some simple files, initially static html with canvas. This way, it would be smoother to later incorporate full dynamic scenes without restructuring the way the files refer to each other.}
+    \item{\textbf{2D Client}: The initial approach to both learning the technology stack and developing the game was to make a pure client side 2D scene. This is meant to be a simple onboarding as well as a setup for the 2D Network experiments. This consisted of a simple scene drawing multiple shapes on a flat canvas.}
+    \item{\textbf{2D Network}: Once the 2D scene was made, the network component was implemented as a first step to proof of concept that WebGL and WebSockets are not allergic to one another. At this point, the framework only passes the location of each client to the server, and the server to other clients. This is simply an x, y pair. This pseudo-code is a simplified concept of the server and client code.}
+        \subitem{
+\begin{verbatim}
+// server code
+client.on(move, new_location):
+    client_list.broadcast(new_location)
+
+// client code
+client.on(keypress):
+    move(keypress);
+    send_to_server(new_location)
+\end{verbatim}
+        }
+    \item{\textbf{3D Client}: Almost simultaneously with the 2D Network, the 3D Client was being worked on. This, like the 2D client, is largely an experiment, but unlike the 2D client, will eventually become part of the final product. This began with drawing and transforming simple shapes in WebGL. Once that was working, I began to incorporate components of three.js to accelerate the drawing and rendering of a real game scene.}
+    \item{\textbf{3D Network}: Arguably one of the most difficult parts of this project was to make sure the 3D scenes between all the clients are synchronized between all the clients and the server as well. A few components went into making this happen.\\\\First and foremost, keeping a consistent heartbeat via a timer in all the clients and server was important. This way, we can limit the number of actions of each client to a small finite number on each beat. For example, if a client holds down a key, the result would then not depend on the keyboard repeat rate of the client, but on the speed of the heartbeat on the server and client.\\\\Second was to limit the amount of information and frequency of data transfers. Minimizing the size of the packet as well as only broadcasting to clients only when necessary is important. Also, the implementation of dead reckoning decreasing the amount of packets being sent as well.\\\\Finally, though the heartbeat seems to solve the problem of timing, it was important to make sure the game states in the clients and the servers were consistent at all times. For example, in the demo game, a player should not be able to hit another player if not both of them are synchronized in location and velocity. This was achieved by mainly server-side checks to make sure all clients are where they think they are. If not, the server would then update them appropriately.}
+    \item{\textbf{Gameplay}: Finally, while implementing the 3D Network and Scene, the gameplay component was crucial in both the testing and final product. In order to make sure the clients can interact correctly, much of the gameplay needed to be implemented along the way. There is still plenty to implement before this demo can be a full consumer quality game, but the current installations provide a robust proof of concept that this technology stack is a feasible, powerful, and generalizable approach to a large network of developers, gamers, and researchers.}
+
+\end{itemize}
+
+\section{Results}
+    The game framework I made was straightforward to expand to a demo game. It has implemented a 3D environment that allows different clients to connect to the same space online, and interact with one another. The sample game implements this in the form of a spaceship game where the players try to eliminate each other by shooting bullets. However, the code base allows this to be easily modified to any form of clients, interactions, or environments. \\\\
+    The documentation allows for easy onboarding of a developer who can then write simple utility functions to define the types of assets that should be loaded, the interactions they would like between clients, the environment that would like, and many other configurations.
+
+\section{Conclusions}
+    I was able to achieve a solid proof of concept for a technology stack that uses WebGL, WebSockets, and Node.js to host a multiplayer online game framework as well as make a demo game out of it. I also achieve a personal goal of learning all of these technologies as well as the concepts behind making a game. This experience has allowed me to learn yet another stack of skills that I can refer back to in academics and in the industry. I hope this will be a useful contribution to both the online developers and the research community.
+
+\section{Future Work}
+Throughout the process of making this game framework, I became increasingly interested in the concepts and technologies behind the making of a game. This long list of future work is a side effect of my excitement.
+\begin{itemize}
+    \item{\textbf{Entity Interpolation (Valve)}}
+        \subitem{\textbf{Latency Compensation}: A method to ease the lag that is experienced by clients is to store past data and show it to the clients as present data. As a direct result, present data will be stored as future data and presented as past data in the next frame. This is one large component of entity interpolation which makes the viewing of the game more smooth and, mimicking a low latency connection.}
+    \item{\textbf{Collisions between players}: For the best effects, this would require a full implementation of rigid body collisions and physics behind it. The ideal effect is that ships would be damaged and physically move away from each other with jerk and acceleration on collision. Given a full physically accurate simulation, the force and angle of approach would also affect the result such that some collisions would result in damage and some would result in a nosedive.}
+    \item{\textbf{Dead (Ded) Reckoning with acceleration (currently only velocity)}: Currently, the implementation uses a "naive" form of dead reckoning with velocity only. Major improvements are already seen, but it would be even more effective and correct if, in conjunction with latency compensation, acceleration was built into the dead reckoning implementation.}
+    \item{\textbf{Network and Client side optimizations}: The data that is being sent through the network between server and client is not at its slimmest at the moment. Then, the same transformations and changes of states are being applied at both ends. This is necessary, but the functions that implement it are not optimized. Also, included in this, there should be server side checks for data consitency across clients.}
+    \item{\textbf{Expose game states to clients}: One of the more straightforward tasks would be to expose the stats to each client. This would require a generic interface that would be flexible enough to keep track of different stats. In the case of the demo game, an example stat could be the number of other players a player has eliminated.}
+    \item{\textbf{Environment obstacles}: Currently, there are clouds rendered on the client sides that make the scene more realistic and interactive. However, these clouds does not affect a player's ability to navigate. It would be more interesting if there were obstacles or effects that would affect the speed of a player or the spaces they can occupy.}
+    \item{\textbf{More variety on models}: The HexGL game model is being used in the demo game made on this framework. To build more customization into the system, there can be different models, colors, etc.}
+    \item{\textbf{Higher quality graphics}: Overall, the rendering of this project was not realistic. It was not the focus of this project. However, to push this project to the next level, it would make sense to make more realistic textures, materials, etc.}
+\end{itemize}
+
 \section{Appendix}
 A list of resources that I used, but did not quite belong in references.
 \begin{itemize}
@@ -231,32 +278,6 @@ A list of resources that I used, but did not quite belong in references.
     \item{Learning WebGL}
         \subitem{http://learningwebgl.com}
 \end{itemize}
-
-\hrulefill \\
-I will fill in the following sections as I make progress on my project, particularly for the alpha review and the final deliverable. % In these sections, list pseudo-code, charts, images, examples, etc. to show what you’ve done over the course of the semester.
-
-\section{Method}
-
-\section{Results}
-    The game framework I made was straightforward to expand to a demo game. It has implemented a 3D environment that allows different clients to connect to the same space online, and interact with one another. The sample game implements this in the form of a spaceship game where the players try to eliminate each other by shooting bullets. However, the code base allows this to be easily modified to any form of clients, interactions, or environments. \\\\
-    The documentation allows for easy onboarding of a developer who can then write simple utility functions to define the types of assets that should be loaded, the interactions they would like between clients, the environment that would like, and many other configurations.
-
-\section{Conclusions}
-    I was able to achieve a solid proof of concept for a technology stack that uses WebGL, WebSockets, and Node.js to host a multiplayer online game framework as well as make a demo game out of it. I also achieve a personal goal of learning all of these technologies as well as the concepts behind making a game. This experience has allowed me to learn yet another stack of skills that I can refer back to in academics and in the industry. I hope this will be a useful contribution to both the online developers and the research community.
-
-\section{Future Work}
-\begin{itemize}
-    \item{\textbf{Entity Interpolation (Valve)}}
-        \subitem{\textbf{Latency Compensation}: A method to ease the lag that is experienced by clients is to store past data and show it to the clients as present data. As a direct result, present data will be stored as future data and presented as past data in the next frame. This is one large component of entity interpolation which makes the viewing of the game more smooth and, mimicking a low latency connection.}
-    \item{\textbf{Collisions between players}: For the best effects, this would require a full implementation of rigid body collisions and physics behind it. The ideal effect is that ships would be damaged and physically move away from each other with jerk and acceleration on collision. Given a full physically accurate simulation, the force and angle of approach would also affect the result such that some collisions would result in damage and some would result in a nosedive.}
-    \item{\textbf{Dead (Ded) Reckoning with acceleration (currently only velocity)}: Currently, the implementation uses a "naive" form of dead reckoning with velocity only. Major improvements are already seen, but it would be even more effective and correct if, in conjunction with latency compensation, acceleration was built into the dead reckoning implementation.}
-    \item{\textbf{Network and Client side optimizations}: The data that is being sent through the network between server and client is not at its slimmest at the moment. Then, the same transformations and changes of states are being applied at both ends. This is necessary, but the functions that implement it are not optimized. Also, included in this, there should be server side checks for data consitency across clients.}
-    \item{\textbf{Expose game states to clients}: One of the more straightforward tasks would be to expose the stats to each client. This would require a generic interface that would be flexible enough to keep track of different stats. In the case of the demo game, an example stat could be the number of other players a player has eliminated.}
-    \item{\textbf{Environment obstacles}: Currently, there are clouds rendered on the client sides that make the scene more realistic and interactive. However, these clouds does not affect a player's ability to navigate. It would be more interesting if there were obstacles or effects that would affect the speed of a player or the spaces they can occupy.}
-    \item{\textbf{More variety on models}: The HexGL game model is being used in the demo game made on this framework. To build more customization into the system, there can be different models, colors, etc.}
-    \item{\textbf{Higher quality graphics}: Overall, the rendering of this project was not realistic. It was not the focus of this project. However, to push this project to the next level, it would make sense to make more realistic textures, materials, etc.}
-\end{itemize}
-
 
 \bibliographystyle{acmsiggraph}
 \bibliography{template}

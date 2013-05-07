@@ -61,5 +61,9 @@ The following javascript packages are required for installation:
 ## three.js
 Currently using: THREE.js r58
 
+## Demo Video
+A short video of the demo game using this framework can be found at:  
+[Demo Game Video](https://vimeo.com/65649003)
+
 ## Presentation
 The presentation is in HTML5 and thus requires reveal.js to be present as a sibling directory to this repository.
