@@ -246,15 +246,15 @@ I will fill in the following sections as I make progress on my project, particul
 
 \section{Future Work}
 \begin{itemize}
-    \item{Entity Interpolation (Valve)}
-        \subitem{Latency Compensation}
-    \item{Collisions between players}
-    \item{Dead (Ded) Reckoning with acceleration (currently only velocity)}
-    \item{Network and Client side optimizations}
-    \item{Expose game states to clients}
-    \item{Environment obstacles}
-    \item{More variety on models}
-    \item{Higher quality graphics}
+    \item{\textbf{Entity Interpolation (Valve)}}
+        \subitem{\textbf{Latency Compensation}: A method to ease the lag that is experienced by clients is to store past data and show it to the clients as present data. As a direct result, present data will be stored as future data and presented as past data in the next frame. This is one large component of entity interpolation which makes the viewing of the game more smooth and, mimicking a low latency connection.}
+    \item{\textbf{Collisions between players}: For the best effects, this would require a full implementation of rigid body collisions and physics behind it. The ideal effect is that ships would be damaged and physically move away from each other with jerk and acceleration on collision. Given a full physically accurate simulation, the force and angle of approach would also affect the result such that some collisions would result in damage and some would result in a nosedive.}
+    \item{\textbf{Dead (Ded) Reckoning with acceleration (currently only velocity)}: Currently, the implementation uses a "naive" form of dead reckoning with velocity only. Major improvements are already seen, but it would be even more effective and correct if, in conjunction with latency compensation, acceleration was built into the dead reckoning implementation.}
+    \item{\textbf{Network and Client side optimizations}: The data that is being sent through the network between server and client is not at its slimmest at the moment. Then, the same transformations and changes of states are being applied at both ends. This is necessary, but the functions that implement it are not optimized. Also, included in this, there should be server side checks for data consitency across clients.}
+    \item{\textbf{Expose game states to clients}: One of the more straightforward tasks would be to expose the stats to each client. This would require a generic interface that would be flexible enough to keep track of different stats. In the case of the demo game, an example stat could be the number of other players a player has eliminated.}
+    \item{\textbf{Environment obstacles}: Currently, there are clouds rendered on the client sides that make the scene more realistic and interactive. However, these clouds does not affect a player's ability to navigate. It would be more interesting if there were obstacles or effects that would affect the speed of a player or the spaces they can occupy.}
+    \item{\textbf{More variety on models}: The HexGL game model is being used in the demo game made on this framework. To build more customization into the system, there can be different models, colors, etc.}
+    \item{\textbf{Higher quality graphics}: Overall, the rendering of this project was not realistic. It was not the focus of this project. However, to push this project to the next level, it would make sense to make more realistic textures, materials, etc.}
 \end{itemize}
 
 
